@@ -105,6 +105,7 @@ def combine_spectra(filesre="*.fits", directory=".",
     flag = 0
     file_list = []
     for specfile in files_list:
+        specfile = Path(specfile)
         print(specfile)
         file_list.append(specfile.name)
         hdulist = fits.open(specfile)
@@ -136,8 +137,18 @@ def combine_spectra(filesre="*.fits", directory=".",
 def main():
     parser = read_args()
     args = parser.parse_args()
-    print(args.fnames)
-    
+    fnames = args.fnames
+    # print(args.fnames)
+    print(fnames)
+    print(args.opfname)
+    if args.operation == 'combine':
+        combine_spectra(filesre=fnames,
+                        opfilename=args.opfname)
+    # if args.operation == 'combine':
+    #     combine_spectra()
+    #
+
+
 if __name__ == '__main__':
     path = '/home/varghese/Desktop/test_arastro'
     filesre = "*T16*fits"

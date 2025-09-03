@@ -1,1 +1,1 @@
-from .main import combine_spectra
+from .ariastro_main import combine_spectra
