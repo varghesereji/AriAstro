@@ -30,4 +30,4 @@ classifiers = [
 "Repository" = "https://github.com/varghesereji/AriAstro"
 
 [project.scripts]
-comb = "ariastro.main:combine_spectra"
+ariastro = "ariastro.ariastro_main:main"

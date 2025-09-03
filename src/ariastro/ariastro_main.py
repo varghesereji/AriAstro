@@ -4,7 +4,8 @@ import numpy as np
 
 from collections import defaultdict
 
-from interpolation import interpolation_spectra
+from .interpolation import interpolation_spectra
+from .setups import read_args
 
 
 def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
@@ -132,6 +133,11 @@ def combine_spectra(filesre="*.fits", directory=".",
     # print(np.array(flux).shape)
 
 
+def main():
+    parser = read_args()
+    args = parser.parse_args()
+    print(args.fnames)
+    
 if __name__ == '__main__':
     path = '/home/varghese/Desktop/test_arastro'
     filesre = "*T16*fits"
