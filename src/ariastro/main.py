@@ -4,10 +4,18 @@ import numpy as np
 
 from collections import defaultdict
 
+from interpolation import interpolation_spectra
+
 
 def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
+    '''
+    The function to create the fits file.
+    datadict: Dictionary of data. Dict keys will
+    be the name of each extension.
+    header dict: Header dictionary.
+    filename: Name of the file with path.
+    '''
     header_names = list(datadict.keys())
-    
     hdus = []
 
     # --- Primary HDU ---
@@ -67,6 +75,7 @@ def combine_data(datadict, method='mean', skipexts=[0, 13]):
 
 
 def combine_spectra(filesre="*.fits", directory=".",
+                    opfilename="Comb_spectra.fits",
                     fluxext=(1, 2, 3),
                     varext=(4, 5, 6),
                     wlext=(7, 8, 9),
@@ -104,35 +113,27 @@ def combine_spectra(filesre="*.fits", directory=".",
             try:
                 data = np.array(hdulist[i].data).astype(np.float64)
             except TypeError:
-                # print('TypeError')
                 data = np.array(hdulist[i].data)
             data_dict[extname].append(data)
             if flag == 0:
                 header_dict[extname] = hdulist[i].header
         flag += 1
-        # for e, exts in enumerate(fluxext):
-        #     print("Ext:", exts)
-        #     datadict = get_data(hdu, fluxext[e], varext[e], wlext[e])
-        #     if wl_master is None:
-        #         wl_master = datadict['wl']
-        #         flux_array = datadict['flux']
-        #         var_array = datadict['var']
-        #     else:
-        #         flux_array = np.vstack((flux_array, datadict['flux']))
-        #         var_array = np.vstack((var_array, datadict['var']))
-  
+
         hdulist.close()
-    combined_dict = combine_data(data_dict)
+    interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
+    combined_dict = combine_data(interp_data_dict)
     # print(combined_dict)
     print(file_list)
     header_dict['HDU0']['HISTORY'] = "Combined {}".format(list(file_list))
-    create_fits(combined_dict, header_dict)
+    create_fits(combined_dict, header_dict,
+                filename=Path(directory) / opfilename)
     # print(header_dict)
     del data_dict
     # print(np.array(flux).shape)
-        
+
+
 if __name__ == '__main__':
     path = '/home/varghese/Desktop/test_arastro'
     filesre = "*T16*fits"
     # filesre = list(Path(path).glob('*.fits'))
-    combine_spectra(filesre, path)
+    combine_spectra(filesre, path, opfilename="Comb_spectra.fits")
