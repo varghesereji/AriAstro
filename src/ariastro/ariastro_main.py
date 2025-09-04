@@ -5,6 +5,7 @@ import logging
 
 from collections import defaultdict
 
+from .logger import logger
 from .interpolation import interpolation_spectra
 from .setups import read_args
 
@@ -70,7 +71,7 @@ def combine_data(datadict, method='mean', skipexts=[0, 13]):
     comb_dicts = {}
     # print(dictkeys)
     for n, keys in enumerate(dictkeys):
-        print(n, keys, skipexts)
+        # print(n, keys, skipexts)
         data = datadict[keys]
         if n in skipexts:
             comb_data = data[0]
@@ -114,7 +115,7 @@ def combine_spectra(filesre="*.fits", directory=".",
     file_list = []
     for cro, specfile in enumerate(files_list):
         specfile = Path(specfile)
-        print(cro, specfile)
+        logger.info("{} {}".format(cro, specfile))
         file_list.append(specfile.name)
         hdulist = fits.open(specfile)
         for i, hdu in enumerate(hdulist):
@@ -133,7 +134,6 @@ def combine_spectra(filesre="*.fits", directory=".",
     interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
     combined_dict = combine_data(interp_data_dict)
     # print(combined_dict)
-    print(file_list)
     header_dict['HDU0']['HISTORY'] = "Combined {}".format(list(file_list))
     create_fits(combined_dict, header_dict,
                 filename=Path(directory) / opfilename)
@@ -147,6 +147,7 @@ def main():
     parser = read_args()
     args = parser.parse_args()
     fnames = args.fnames
+    logger.info("Starting the pipeline")
     # print(args.fnames)
     # print(fnames)
     # print(args.opfname)

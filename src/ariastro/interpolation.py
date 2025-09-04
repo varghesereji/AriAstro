@@ -1,10 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import logging
-logger = logging.getLogger(__name__)
+from .logger import logger
+
 
 from scipy.interpolate import CubicSpline
-
 
 
 def interpolate_data(data, wl_new, wl_corr):
@@ -31,26 +29,30 @@ def interpolation_spectra(fulldata, fluxext, wlext, varext):
         header_wl = keys[wext]
         header_fl = keys[fext]
         header_va = keys[vext]
-        print(header_wl, header_fl, header_va)
+        # print(header_wl, header_fl, header_va)
 
         flux_data = np.array(fulldata[header_fl])
         wl_data = np.array(fulldata[header_wl])
         var_data = np.array(fulldata[header_va])
+        logger.info("Extensions: {} {} {}".format(
+            wext, fext, vext))
+        logger.info("Exten names: {} {} {}".format(
+            header_wl, header_fl, header_va))
 
         ref_wl = wl_data[0]
         # print(np.size(wl_data))
         for epoin, epodata in enumerate(wl_data):
             # Goint through each epoch
-            print("Epoch", epoin)
-            logger.info("Epoch {}".format(epoin))
+            # print("Epoch", epoin)
+            # logger.info("Epoch {}".format(epoin))
             epoch_flux = flux_data[epoin]
             epoch_wl = wl_data[epoin]
             epoch_var = var_data[epoin]
-            
+
             for order, wl_order in enumerate(epoch_wl):
                 # Goint through each order of the epoch
                 # print(order, '==========================')
-                logger.info("order {}".format(order))
+                # logger.info("order {}".format(order))
                 fl_order = epoch_flux[order]
                 var_order = epoch_var[order]
                 # plt.figure()
@@ -60,7 +62,6 @@ def interpolation_spectra(fulldata, fluxext, wlext, varext):
                     | np.isinf(fl_order) | np.isinf(var_order)
                 wl_zeros = wl_order < 3000
                 data_mask = data_nanmask | wl_zeros
-                print(order, np.where(data_nanmask))
                 if np.sum(data_mask) == np.size(fl_order):
                     interp_flux = fl_order
                     interp_var = var_order
