@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from pathlib import Path
 from astropy.io import fits
 import numpy as np
@@ -8,6 +10,7 @@ from collections import defaultdict
 from .logger import logger
 from .interpolation import interpolation_spectra
 from .setups import read_args
+from .operations import combine_data
 
 
 def setup_logging():
@@ -16,6 +19,7 @@ def setup_logging():
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(name)s - %(message)s'
         )
+
 
 def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
     '''
@@ -66,24 +70,6 @@ def get_data(hdu, fluxext, wlext, varext):
     return datadict
 
 
-def combine_data(datadict, method='mean', skipexts=[0, 13]):
-    dictkeys = list(datadict.keys())
-    comb_dicts = {}
-    # print(dictkeys)
-    for n, keys in enumerate(dictkeys):
-        # print(n, keys, skipexts)
-        data = datadict[keys]
-        if n in skipexts:
-            comb_data = data[0]
-        else:
-            if method == 'mean':
-                comb_data = np.nanmean(data, axis=0)
-            elif method == 'median':
-                comb_data = np.nanmedian(data, axis=0)
-        comb_dicts[keys] = comb_data
-    return comb_dicts
-
-
 def combine_spectra(filesre="*.fits", directory=".",
                     opfilename="Comb_spectra.fits",
                     fluxext=(1, 2, 3),
@@ -108,7 +94,7 @@ def combine_spectra(filesre="*.fits", directory=".",
     else:
         print("Enter either files list or the regular expression")
         return
-    
+
     data_dict = defaultdict(list)
     header_dict = {}
     flag = 0
@@ -140,7 +126,6 @@ def combine_spectra(filesre="*.fits", directory=".",
     # print(header_dict)
     del data_dict
     # print(np.array(flux).shape)
-
 
 
 def main():
