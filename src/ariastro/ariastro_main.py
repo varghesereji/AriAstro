@@ -1,12 +1,20 @@
 from pathlib import Path
 from astropy.io import fits
 import numpy as np
+import logging
 
 from collections import defaultdict
 
 from .interpolation import interpolation_spectra
 from .setups import read_args
 
+
+def setup_logging():
+    logging.basicConfig(
+        filename='ariastro_comb.log',
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(name)s - %(message)s'
+        )
 
 def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
     '''
@@ -90,7 +98,7 @@ def combine_spectra(filesre="*.fits", directory=".",
     fluxext: extension for flux array.
 
     '''
-    print(filesre)
+    # print(filesre)
     if isinstance(filesre, list):
         files_list = filesre
     elif isinstance(filesre, str):
@@ -104,9 +112,9 @@ def combine_spectra(filesre="*.fits", directory=".",
     header_dict = {}
     flag = 0
     file_list = []
-    for specfile in files_list:
+    for cro, specfile in enumerate(files_list):
         specfile = Path(specfile)
-        print(specfile)
+        print(cro, specfile)
         file_list.append(specfile.name)
         hdulist = fits.open(specfile)
         for i, hdu in enumerate(hdulist):
@@ -134,13 +142,14 @@ def combine_spectra(filesre="*.fits", directory=".",
     # print(np.array(flux).shape)
 
 
+
 def main():
     parser = read_args()
     args = parser.parse_args()
     fnames = args.fnames
     # print(args.fnames)
-    print(fnames)
-    print(args.opfname)
+    # print(fnames)
+    # print(args.opfname)
     if args.operation == 'combine':
         combine_spectra(filesre=fnames,
                         opfilename=args.opfname)
@@ -150,7 +159,8 @@ def main():
 
 
 if __name__ == '__main__':
-    path = '/home/varghese/Desktop/test_arastro'
-    filesre = "*T16*fits"
-    # filesre = list(Path(path).glob('*.fits'))
-    combine_spectra(filesre, path, opfilename="Comb_spectra.fits")
+    setup_logging()
+    # path = '/home/varghese/Desktop/test_arastro'
+    # filesre = "*T16*fits"
+    # # filesre = list(Path(path).glob('*.fits'))
+    # combine_spectra(filesre, path, opfilename="Comb_spectra.fits")
