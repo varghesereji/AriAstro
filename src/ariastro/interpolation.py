@@ -78,7 +78,8 @@ def interpolation_spectra(fulldata, fluxext, wlext, varext):
                 
                 epoch_flux[order] = fl_order
                 epoch_var[order] = var_order
-                epoch_wl[order] = ref_wl[order][order]
+                # print("Ref wl", ref_wl[order
+                epoch_wl[order] = ref_wl[order]
             flux_data[epoin] = epoch_flux
             wl_data[epoin] = epoch_wl
             var_data[epoin] = epoch_var
