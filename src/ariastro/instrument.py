@@ -2,6 +2,7 @@
 import numpy as np
 
 from .utils import extract_allexts
+from .spectral_utils import continuum_normalize
 
 
 class Handle_NEID:
@@ -99,7 +100,7 @@ class Handle_NEID:
 
         return corr_wl_array, header
 
-    def process_data(self, fname):
+    def process_data(self, fname, contnorm=False):
         """
         Process a NEID FITS file: barycentric correction, blaze correction,
         and variance correction.
@@ -109,6 +110,7 @@ class Handle_NEID:
         - Applies barycentric correction to the wavelength arrays.
         - Replaces blaze arrays with ones (effectively removing blaze shape).
         - Corrects flux and variance for blaze.
+        - Continuum normalization. (optional)
 
         Parameters
         ----------
@@ -121,14 +123,16 @@ class Handle_NEID:
             Dictionary with corrected data arrays (flux, variance, blaze).
         headerdict : dict
             Dictionary with updated FITS headers.
+        contnorm  :  bool
+            Do continuum division with the function continuum_normalize.
         """
         datadict, headerdict = self.getfull_data(fname)
         # print(datadict)
 
-        sci_ext = (1, 2, 3)
-        var_ext = (4, 5, 6)
-        wl_ext = (7, 8, 9)
-        blaze_ext = (15, 16, 17)
+        sci_ext = [1, 2, 3]
+        var_ext = [4, 5, 6]
+        wl_ext = [7, 8, 9]
+        blaze_ext = [15, 16, 17]
         header_kws = list(datadict.keys())
         # print(header_kws)
         for n, ext in enumerate(sci_ext):
@@ -153,6 +157,8 @@ class Handle_NEID:
             datadict[flux_kw] = corr_flux
             datadict[var_kw] = corr_var
             datadict[blaze_kw] = newblaze
+        if contnorm:
+            datadict = continuum_normalize(datadict, sci_ext, var_ext, wl_ext)
 
         return datadict, headerdict
 

@@ -62,4 +62,6 @@ def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
     hdul = fits.HDUList(hdus)
     hdul.writeto(filename, overwrite=True)
 
+
+
 # End
