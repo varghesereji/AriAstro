@@ -11,6 +11,7 @@ from .logger import logger
 from .interpolation import interpolation_spectra
 from .setups import read_args
 from .operations import combine_data
+from .utils import create_fits
 
 
 def setup_logging():
@@ -19,44 +20,6 @@ def setup_logging():
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(name)s - %(message)s'
         )
-
-
-def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
-    '''
-    The function to create the fits file.
-    datadict: Dictionary of data. Dict keys will
-    be the name of each extension.
-    header dict: Header dictionary.
-    filename: Name of the file with path.
-    '''
-    header_names = list(datadict.keys())
-    hdus = []
-
-    # --- Primary HDU ---
-    primary_data = np.atleast_1d(datadict[header_names[0]])
-    if primary_data.ndim == 1:
-        primary_data = primary_data.reshape(1, -1)  # ensure 2D
-    primary_header = fits.Header(header_dict[header_names[0]])
-    primary_hdu = fits.PrimaryHDU(primary_data, header=primary_header)
-    hdus.append(primary_hdu)
-
-    # --- Extensions ---
-    for exts in header_names[1:]:
-        data = np.atleast_1d(datadict[exts])
-        try:
-            if data.ndim == 1:
-                data = data.reshape(1, -1)  # ensure 2D
-            ext_header = fits.Header(header_dict[exts])
-            hdu = fits.ImageHDU(data, header=ext_header, name=exts)
-        except KeyError:
-            data = np.array([np.nan, np.nan])
-            ext_header = fits.Header(header_dict[exts])
-            hdu = fits.ImageHDU(data, header=ext_header, name=exts)
-        hdus.append(hdu)
-
-    # --- Write FITS ---
-    hdul = fits.HDUList(hdus)
-    hdul.writeto(filename, overwrite=True)
 
 
 def get_data(hdu, fluxext, wlext, varext):
