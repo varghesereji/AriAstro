@@ -24,6 +24,7 @@ Combine
 
 def combine_data(dataarr, var=None, method='mean'):
     # print('dataarr', dataarr)
+    dataarr = np.array(dataarr)
     N = dataarr.shape[0]
     if method == 'mean':
         comb_data = np.nanmean(dataarr, axis=0)
