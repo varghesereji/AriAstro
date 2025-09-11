@@ -3,3 +3,4 @@ from .utils import extract_allexts
 from .instrument import Handle_NEID
 
 from .spectral_utils import continuum_normalize
+from .operations import combine_data_full

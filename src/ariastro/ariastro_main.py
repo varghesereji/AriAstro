@@ -10,7 +10,7 @@ from collections import defaultdict
 from .logger import logger
 from .spectral_utils import interpolation_spectra
 from .setups import read_args
-from .operations import combine_data
+from .operations import combine_data_full
 from .utils import create_fits
 from .instrument import instrument_dict
 
@@ -70,16 +70,17 @@ def combine_spectra(filesre="*.fits", directory=".",
         instrument = instrument_dict["NEID"]()
 
         datadict, headerdict = instrument.process_data(fname=specfile,
-                                                       contnorm=True)
+                                                       contnorm=False)
         if headerdict_main is None:
             headerdict_main = headerdict
 
         for hduname, data in datadict.items():
             # print(hduname)
             data_dict[hduname].append(data)
-
+    # print("data_dict", np.array(data_dict["SCIWAVE"])[:, 50])
     interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
-    combined_dict = combine_data(interp_data_dict)
+    # print("interp_data_dict", np.array(interp_data_dict["SCIFLUX"]).shape)
+    combined_dict = combine_data_full(interp_data_dict)
     # # print(combined_dict)
     dict_keys = list(headerdict_main.keys())
 
