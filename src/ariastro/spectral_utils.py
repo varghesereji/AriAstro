@@ -1,6 +1,10 @@
 import numpy as np
 import astropy.units as u
-from specutils.spectra import Spectrum
+try:
+    from specutils.spectra import Spectrum
+except ImportError:
+    from specutils.spectra import Spectrum1D as Spectrum
+
 from specutils.fitting import fit_generic_continuum
 
 
