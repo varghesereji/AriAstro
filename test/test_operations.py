@@ -7,17 +7,33 @@ from ariastro.operations import combine_data_full
 
 
 @pytest.mark.parametrize(
-    "arr1, arr2, operation, expected",
+    "arr1, arr2, var_arr1, var_arr2, operation, expected, expected_var",
     [
-        (np.array([1, 2]), np.array([3, 4]), 'sum', np.array([4, 6])),
-        (np.array([5, 7]), np.array([2, 3]), 'diff', np.array([3, 4])),
-        (np.array([2, 3]), np.array([4, 5]), 'prod', np.array([8, 15])),
-        (np.array([8, 9]), np.array([2, 3]), 'div', np.array([4.0, 3.0])),
+        (np.array([1, 2]), np.array([3, 4]), None, None,
+         'sum', np.array([4, 6]), None),
+        (np.array([5, 7]), np.array([2, 3]), None, None,
+         'diff', np.array([3, 4]), None),
+        (np.array([2, 3]), np.array([4, 5]), None, None,
+         'prod', np.array([8, 15]), None),
+        (np.array([8, 9]), np.array([2, 3]), None, None,
+         'div', np.array([4.0, 3.0]), None),
+        (1, 1, None, None, 'sum', 2, None),
+        (1, 1, 1, 1, 'sum', 2, 2)
     ]
 )
-def test_add(arr1, arr2, operation, expected):
-    result = ari_operations(arr1, arr2, operation)
-    assert np.allclose(result, expected)
+def test_add(arr1, arr2,
+             var_arr1, var_arr2,
+             operation,
+             expected, expected_var):
+    if (var_arr1 is None) and (var_arr2 is None):
+        result = ari_operations(arr1, arr2, var_arr1, var_arr2, operation)
+        assert np.allclose(result, expected)
+    else:
+        result, variance = ari_operations(arr1, arr2,
+                                          var_arr1, var_arr2,
+                                          operation)
+        assert np.allclose(result, expected)
+        assert np.allclose(variance, expected_var)
 
 
 @pytest.mark.parametrize(
