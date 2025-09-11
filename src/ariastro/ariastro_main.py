@@ -8,7 +8,7 @@ import logging
 from collections import defaultdict
 
 from .logger import logger
-from .interpolation import interpolation_spectra
+from .spectral_utils import interpolation_spectra
 from .setups import read_args
 from .operations import combine_data
 from .utils import create_fits
