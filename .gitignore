@@ -2,3 +2,5 @@ src/ariastro/Avg_neid_data.fits
 *~
 src/AriAstro.egg-info
 src/ariastro/__pycache__
+*/*.log
+test/__pycache__
