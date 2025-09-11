@@ -14,7 +14,7 @@ def ari_operations(arr1, arr2, operation='sum'):
         return arr1 / arr2
 
 
-def combine_data(datadict, method='mean', skipexts=[0, 13]):
+def combine_data(datadict, method='mean', skipexts=[0, 11, 13]):
     dictkeys = list(datadict.keys())
     comb_dicts = {}
     # print(dictkeys)
@@ -25,6 +25,7 @@ def combine_data(datadict, method='mean', skipexts=[0, 13]):
             comb_data = data[0]
         else:
             if method == 'mean':
+                print(data)
                 comb_data = np.nanmean(data, axis=0)
             elif method == 'median':
                 comb_data = np.nanmedian(data, axis=0)

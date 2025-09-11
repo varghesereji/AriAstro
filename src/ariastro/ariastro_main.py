@@ -12,6 +12,7 @@ from .interpolation import interpolation_spectra
 from .setups import read_args
 from .operations import combine_data
 from .utils import create_fits
+from .instrument import instrument_dict
 
 
 def setup_logging():
@@ -59,33 +60,36 @@ def combine_spectra(filesre="*.fits", directory=".",
         return
 
     data_dict = defaultdict(list)
-    header_dict = {}
-    flag = 0
+    headerdict_main = None
     file_list = []
     for cro, specfile in enumerate(files_list):
         specfile = Path(specfile)
+        # print(specfile)
         logger.info("{} {}".format(cro, specfile))
         file_list.append(specfile.name)
-        hdulist = fits.open(specfile)
-        for i, hdu in enumerate(hdulist):
-            extname = hdu.header.get('EXTNAME', f'HDU{i}')
-            # print(i, extname)
-            try:
-                data = np.array(hdulist[i].data).astype(np.float64)
-            except TypeError:
-                data = np.array(hdulist[i].data)
-            data_dict[extname].append(data)
-            if flag == 0:
-                header_dict[extname] = hdulist[i].header
-        flag += 1
+        instrument = instrument_dict["NEID"]()
 
-        hdulist.close()
+        datadict, headerdict = instrument.process_data(fname=specfile,
+                                                       contnorm=True)
+        if headerdict_main is None:
+            headerdict_main = headerdict
+
+        for hduname, data in datadict.items():
+            # print(hduname)
+            data_dict[hduname].append(data)
+
     interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
     combined_dict = combine_data(interp_data_dict)
-    # print(combined_dict)
-    header_dict['HDU0']['HISTORY'] = "Combined {}".format(list(file_list))
-    create_fits(combined_dict, header_dict,
+    # # print(combined_dict)
+    dict_keys = list(headerdict_main.keys())
+
+    headerdict_main[dict_keys[0]]['HISTORY'] = "Combined {}".format(
+        list(file_list))
+
+    logger.info("Combining spectra")
+    create_fits(combined_dict, headerdict_main,
                 filename=Path(directory) / opfilename)
+    logger.info("Combined spectra")
     # print(header_dict)
     del data_dict
     # print(np.array(flux).shape)
