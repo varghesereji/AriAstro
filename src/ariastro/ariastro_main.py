@@ -12,6 +12,7 @@ from .spectral_utils import interpolation_spectra
 from .setups import read_args
 from .operations import combine_data_full
 from .utils import create_fits
+from .utils import extract_allexts
 from .instrument import instrument_dict
 
 
@@ -36,6 +37,7 @@ def get_data(hdu, fluxext, wlext, varext):
 
 def combine_spectra(filesre="*.fits", directory=".",
                     opfilename="Comb_spectra.fits",
+                    instrumentname=None,
                     fluxext=(1, 2, 3),
                     varext=(4, 5, 6),
                     wlext=(7, 8, 9),
@@ -66,10 +68,14 @@ def combine_spectra(filesre="*.fits", directory=".",
         # print(specfile)
         logger.info("{} {}".format(cro, specfile))
         file_list.append(specfile.name)
-        instrument = instrument_dict["NEID"]()
+        if instrumentname is not None:
+            instrument = instrument_dict[instrumentname]()
 
-        datadict, headerdict = instrument.process_data(fname=specfile,
-                                                       contnorm=False)
+            datadict, headerdict = instrument.process_data(fname=specfile,
+                                                           contnorm=True)
+        else:
+            datadict, headerdict = extract_allexts(fname)
+            
         if headerdict_main is None:
             headerdict_main = headerdict
 
