@@ -201,7 +201,18 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ariastro_main.html">ariastro_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations.html">operations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
+</ul>
+</li>
+</ul>
+
 </div>
 </div>
 
@@ -519,16 +530,17 @@ corresponding arrays.</p>
 <li><p><strong>extension</strong> – or metadata. Flux and variance arrays are stacked along the first axis
 (i.e., shape <code class="docutils literal notranslate"><span class="pre">(n_files,</span> <span class="pre">n_points,</span> <span class="pre">...)</span></code>).</p></li>
 <li><p><strong>dataext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <cite>datadict.keys()</cite> that correspond to flux data. Default is</p></li>
-<li><p><strong>``</strong><strong>[</strong><strong>1</strong> – </p></li>
+<li><p><strong>[</strong><strong>1</strong></p></li>
 <li><p><strong>2</strong></p></li>
-<li><p><strong>3</strong><strong>]</strong><strong>``.</strong></p></li>
+<li><p><strong>3</strong><strong>]</strong><strong>.</strong></p></li>
 <li><p><strong>varext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <cite>datadict.keys()</cite> that correspond to variance data. Default</p></li>
-<li><p><strong>``</strong><strong>[</strong><strong>4</strong> (<em>is</em>) – </p></li>
+<li><p><strong>[</strong><strong>4</strong> (<em>is</em>)</p></li>
 <li><p><strong>5</strong></p></li>
-<li><p><strong>6</strong><strong>]</strong><strong>``.</strong></p></li>
-<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'sum'}</em><em>, </em><em>optional</em>) – Method used to combine the fluxes and variances.
-- <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> : compute the mean across input files
-- <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> : compute the sum across input files</p></li>
+<li><p><strong>6</strong><strong>]</strong><strong>.</strong></p></li>
+<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'biweight'}</em><em>, </em><em>optional</em>) – Method used to combine the fluxes and variances.
+- <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> : compute the mean across input files,
+- <code class="docutils literal notranslate"><span class="pre">'median'</span></code> : compute the sum across input files,
+- <code class="docutils literal notranslate"><span class="pre">'biweight'</span></code> : compute the biweight across input files</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

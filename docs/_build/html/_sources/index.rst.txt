@@ -23,7 +23,6 @@ perform continuum normalization with error propagation.
    quickstart
    usage
    api
-   changelog
 
 Indices and tables
 ==================
