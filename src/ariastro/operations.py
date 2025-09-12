@@ -1,5 +1,7 @@
 # The functions to perform mathematical operations
 import numpy as np
+from astropy.stats import biweight_location
+
 
 '''
 Mathematical operations
@@ -88,6 +90,46 @@ Combine
 
 
 def combine_data(dataarr, var=None, method='mean'):
+    """
+    Combine multiple arrays along the first axis using a specified method.
+
+    Parameters
+    ----------
+    dataarr : array_like
+        Input data array of shape (N, ...), where `N` is the number of
+        individual datasets to combine. The combination is performed
+        along axis=0.
+    var : array_like, optional
+        Variance array of the same shape as `dataarr`. If provided,
+        error propagation is performed assuming independent errors,
+        yielding the variance of the combined data. Default is None.
+    method : {'mean', 'median', 'biweight'}, optional
+        Method used for combining the data:
+
+        - 'mean' : arithmetic mean ignoring NaNs.
+        - 'median' : median ignoring NaNs.
+        - 'biweight' : robust biweight location (from `astropy.stats`).
+
+        Default is 'mean'.
+
+    Returns
+    -------
+    comb_data : ndarray
+        Combined data array, same shape as a single input array
+        (i.e., shape of `dataarr[0]`).
+    comb_var : ndarray, optional
+        Combined variance array of the same shape as `comb_data`.
+        Returned only if `var` is provided.
+
+    Notes
+    -----
+    - NaN values in `dataarr` are ignored during combination.
+    - Variance is propagated as if the combination method were the mean,
+      even if `median` or `biweight` are chosen. This provides an
+      approximate uncertainty estimate.
+    - The biweight method is less sensitive to outliers than the mean
+      or median.
+    """
     # print('dataarr', dataarr)
     dataarr = np.array(dataarr)
     N = dataarr.shape[0]
@@ -95,6 +137,8 @@ def combine_data(dataarr, var=None, method='mean'):
         comb_data = np.nanmean(dataarr, axis=0)
     elif method == 'median':
         comb_data = np.nanmedian(dataarr, axis=0)
+    elif method == 'biweight':
+        comb_data = biweight_location(dataarr, axis=0)
 
     # Propagating error.
     # Treating the error propagation

@@ -47,7 +47,6 @@ def combine_spectra(filesre="*.fits", directory=".",
     filesre: Regular expression for the files.
     directory: data directory.
     fluxext: extension for flux array.
-
     '''
     # print(filesre)
     if isinstance(filesre, list):
@@ -114,7 +113,3 @@ def main():
 
 if __name__ == '__main__':
     setup_logging()
-    # path = '/home/varghese/Desktop/test_arastro'
-    # filesre = "*T16*fits"
-    # # filesre = list(Path(path).glob('*.fits'))
-    # combine_spectra(filesre, path, opfilename="Comb_spectra.fits")
