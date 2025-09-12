@@ -64,21 +64,31 @@ def test_combine_data(dataarr, var, method, expected_data, expected_var):
         assert np.allclose(comb_data, expected_data)
 
 
-# def test_combine_data_full_basic():
-#     datadict = {
-#         "KEY0": [np.array([1, 2]), np.array([3, 4])],
-#         "SCIFLUX": [np.array([1, 2]), np.array([3, 4])],
-#         "VAR": [np.array([0.1, 0.2]), np.array([0.1, 0.3])],
-#         "WAVELENGTH": [np.array([500, 600])],
-#     }
-#     combined = combine_data_full(datadict, dataext=[1], varext=[2], method='mean')
-
-#     # Check that non-flux/var keys are replaced by first element
-#     assert np.array_equal(combined["KEY0"], datadict["KEY0"][0])
-#     assert np.array_equal(combined["WAVELENGTH"], datadict["WAVELENGTH"][0])
-    
-#     # Check combined flux and variance (example expectations)
-#     # Depend on fixed combine_data behavior
-#     # For example:
-#     # expected_flux = np.array([2.0, 3.0])  # mean of [1,3] and [2,4]
-#     # expected_var = np.array([0.01, 0.025])  # example propagated variance
+def test_combine_data_full_basic():
+    key0 = [None, None]
+    scifluxes = np.arange(3*3*3).reshape(3, 3, 3)
+    scivars = np.arange(3*3*3).reshape(3, 3, 3)
+    wls = np.array([[500, 600],
+                    [700, 800]])
+    # mean_scifluxes = np.mean(scifluxes, axis=0)
+    mean_flux, var_flux = combine_data(scifluxes, scivars, method='mean')
+    datadict = {
+        "KEY0": key0,
+        "SCIFLUX": scifluxes,
+        "VAR": scivars,
+        "WAVELENGTH": wls
+    }
+    print(datadict["WAVELENGTH"])
+    combined = combine_data_full(datadict, dataext=[1], varext=[2],
+                                 method='mean')
+    # Check that non-flux/var keys are replaced by first element
+    print(datadict["WAVELENGTH"])
+    assert np.array_equal(combined["SCIFLUX"], mean_flux)
+    assert np.array_equal(combined["VAR"], var_flux)
+    assert np.array_equal(combined["WAVELENGTH"], wls[0])
+    assert combined["KEY0"] == key0[0]
+    # Check combined flux and variance (example expectations)
+    # Depend on fixed combine_data behavior
+    # For example:
+    # expected_flux = np.array([2.0, 3.0])  # mean of [1,3] and [2,4]
+    # expected_var = np.array([0.01, 0.025])  # example propagated variance
