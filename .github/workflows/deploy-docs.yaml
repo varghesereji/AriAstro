@@ -13,9 +13,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
+      - name: Install package
+        run: pip install -e .
       - name: Install dependencies
         run: |
-          pip install sphinx
+          pip install sphinx furo sphinx-rtd-theme
           # Add other pip dependencies if required
       - name: Build the documentation
         run: make html -C docs
