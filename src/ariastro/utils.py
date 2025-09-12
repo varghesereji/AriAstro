@@ -1,5 +1,4 @@
 from astropy.io import fits
-import numpy as np
 
 
 def extract_data_header(hdu, ext=0):
@@ -15,6 +14,23 @@ def extract_data_header(hdu, ext=0):
 
 
 def extract_allexts(fname):
+    """
+    Extract all extensions from a FITS file.
+
+    Parameters
+    ----------
+    fname : str
+        Path to the FITS file.
+
+    Returns
+    -------
+    datadict : dict
+        Dictionary mapping extension keywords to numpy arrays
+        containing the data.
+    headerdict : dict
+        Dictionary mapping extension keywords to FITS headers.
+        """
+
     hdu = fits.open(fname)
     datadict = {}
     headerdict = {}
@@ -27,7 +43,8 @@ def extract_allexts(fname):
 
 def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
     """
-    Create a multi-extension FITS file from a dictionary of data arrays and headers.
+    Create a multi-extension FITS file from a dictionary of data arrays and
+    headers.
 
     Parameters
     ----------
@@ -95,7 +112,5 @@ def create_fits(datadict, header_dict, filename="Avg_neid_data.fits"):
     # --- Write FITS ---
     hdul = fits.HDUList(hdus)
     hdul.writeto(filename, overwrite=True)
-
-
 
 # End
