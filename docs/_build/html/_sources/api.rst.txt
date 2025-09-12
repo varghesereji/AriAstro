@@ -1,0 +1,13 @@
+API Reference
+=============
+
+This section contains the API documentation for all modules in **AriAstro**.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Modules
+
+   source/ariastro_main
+   source/operations
+   source/utils
+   api/io

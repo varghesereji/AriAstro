@@ -173,16 +173,17 @@ def combine_data_full(datadict, dataext=[1, 2, 3],
 
     dataext : list of int, optional
         Indices of `datadict.keys()` that correspond to flux data. Default is
-    ``[1, 2, 3]``.
+    [1, 2, 3].
 
     varext : list of int, optional
         Indices of `datadict.keys()` that correspond to variance data. Default
-    is ``[4, 5, 6]``.
+    is [4, 5, 6].
 
-    method : {'mean', 'sum'}, optional
+    method : {'mean', 'median', 'biweight'}, optional
         Method used to combine the fluxes and variances.
-        - ``'mean'`` : compute the mean across input files
-        - ``'sum'`` : compute the sum across input files
+        - ``'mean'`` : compute the mean across input files,
+        - ``'median'`` : compute the sum across input files,
+        - ``'biweight'`` : compute the biweight across input files
 
     Returns
     -------
