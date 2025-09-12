@@ -154,54 +154,54 @@ def combine_data_full(datadict, dataext=[1, 2, 3],
                       varext=[4, 5, 6],
                       method='mean'):
     """
-    Combine flux and variance data from multiple FITS files into a
-    single dictionary.
+    Combine flux and variance data from multiple FITS files into a single
+    dictionary.
 
     This function takes a dictionary of arrays (typically produced from
     reading multiple FITS files), selects specific keys for flux and
-    variance, and combines them using a specified method (e.g. mean or sum).
-    Non-flux/variance entries are copied from the first element of the
-    corresponding arrays.
+    variance, and combines them using a specified method (e.g. mean,
+    median, or biweight). Non-flux/variance entries are copied from the
+    first element of the corresponding arrays.
 
     Parameters
     ----------
     datadict : dict
         Dictionary containing data arrays. Each key corresponds to a FITS
-    extension
-        or metadata. Flux and variance arrays are stacked along the first axis
-        (i.e., shape ``(n_files, n_points, ...)``).
-
+        extension or metadata. Flux and variance arrays are stacked along
+        the first axis (i.e., shape ``(n_files, n_points, ...)``).
     dataext : list of int, optional
-        Indices of `datadict.keys()` that correspond to flux data. Default is
-    [1, 2, 3].
-
+        Indices of ``datadict.keys()`` that correspond to flux data.
+        Default is ``[1, 2, 3]``.
     varext : list of int, optional
-        Indices of `datadict.keys()` that correspond to variance data. Default
-    is [4, 5, 6].
-
+        Indices of ``datadict.keys()`` that correspond to variance data.
+        Default is ``[4, 5, 6]``.
     method : {'mean', 'median', 'biweight'}, optional
         Method used to combine the fluxes and variances.
-        - ``'mean'`` : compute the mean across input files,
-        - ``'median'`` : compute the sum across input files,
+
+        - ``'mean'`` : compute the mean across input files
+        - ``'median'`` : compute the median across input files
         - ``'biweight'`` : compute the biweight across input files
 
     Returns
     -------
     comb_dicts : dict
         New dictionary with combined flux and variance arrays.
-        - Keys in ``flux_keys`` and ``var_keys`` contain the combined arrays.
+
+        - Keys in ``flux_keys`` and ``var_keys`` contain the combined
+          arrays.
         - Other keys are reduced to the first element of their array.
 
     Notes
     -----
-    - This function assumes dictionary key order matches `dataext` and
-    `varext`.
-      Since Python 3.7, dictionary order is guaranteed to be insertion order.
-    - Non-flux/variance arrays (e.g. wavelength grids, headers) are taken from
-      the first FITS file. If you want to preserve the full stack, you should
-      modify the loop that reduces them to index ``[0]``.
-    - To prevent modifying the original input, the function creates a shallow
-    copy of ``datadict``. Arrays themselves are *not* deep-copied.
+    - This function assumes dictionary key order matches ``dataext`` and
+      ``varext``. Since Python 3.7, dictionary order is guaranteed to be
+      insertion order.
+    - Non-flux/variance arrays (e.g., wavelength grids, headers) are taken
+      from the first FITS file. If you want to preserve the full stack,
+      you should modify the loop that reduces them to index ``[0]``.
+    - To prevent modifying the original input, the function creates a
+      shallow copy of ``datadict``. Arrays themselves are *not*
+      deep-copied.
 
     Examples
     --------
@@ -213,7 +213,7 @@ def combine_data_full(datadict, dataext=[1, 2, 3],
     ...     "WAVELENGTH": np.array([[500, 600], [700, 800]])
     ... }
     >>> result = combine_data_full(datadict, dataext=[1], varext=[2],
-    method='mean')
+    ...                            method='mean')
     >>> result["SCIFLUX"]
     array([2.5, 3.5, 4.5])
     >>> result["VAR"]
@@ -221,6 +221,7 @@ def combine_data_full(datadict, dataext=[1, 2, 3],
     >>> result["KEY0"]
     'header1'
     """
+
     dictkeys = list(datadict.keys())
     comb_dicts = datadict.copy()
     # print("comb data full", np.array(datadict["SCIFLUX"]).shape)

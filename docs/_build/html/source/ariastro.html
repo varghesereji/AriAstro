@@ -296,37 +296,40 @@ or median.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.operations.combine_data_full">
 <span class="sig-prename descclassname"><span class="pre">ariastro.operations.</span></span><span class="sig-name descname"><span class="pre">combine_data_full</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datadict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[4,</span> <span class="pre">5,</span> <span class="pre">6]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/operations.html#combine_data_full"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.operations.combine_data_full" title="Link to this definition">¶</a></dt>
-<dd><p>Combine flux and variance data from multiple FITS files into a
-single dictionary.</p>
+<dd><p>Combine flux and variance data from multiple FITS files into a single
+dictionary.</p>
 <p>This function takes a dictionary of arrays (typically produced from
 reading multiple FITS files), selects specific keys for flux and
-variance, and combines them using a specified method (e.g. mean or sum).
-Non-flux/variance entries are copied from the first element of the
-corresponding arrays.</p>
+variance, and combines them using a specified method (e.g. mean,
+median, or biweight). Non-flux/variance entries are copied from the
+first element of the corresponding arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datadict</strong> (<em>dict</em>) – Dictionary containing data arrays. Each key corresponds to a FITS</p></li>
-<li><p><strong>extension</strong> – or metadata. Flux and variance arrays are stacked along the first axis
-(i.e., shape <code class="docutils literal notranslate"><span class="pre">(n_files,</span> <span class="pre">n_points,</span> <span class="pre">...)</span></code>).</p></li>
-<li><p><strong>dataext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <cite>datadict.keys()</cite> that correspond to flux data. Default is</p></li>
-<li><p><strong>[</strong><strong>1</strong></p></li>
-<li><p><strong>2</strong></p></li>
-<li><p><strong>3</strong><strong>]</strong><strong>.</strong></p></li>
-<li><p><strong>varext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <cite>datadict.keys()</cite> that correspond to variance data. Default</p></li>
-<li><p><strong>[</strong><strong>4</strong> (<em>is</em>)</p></li>
-<li><p><strong>5</strong></p></li>
-<li><p><strong>6</strong><strong>]</strong><strong>.</strong></p></li>
-<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'biweight'}</em><em>, </em><em>optional</em>) – Method used to combine the fluxes and variances.
-- <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> : compute the mean across input files,
-- <code class="docutils literal notranslate"><span class="pre">'median'</span></code> : compute the sum across input files,
-- <code class="docutils literal notranslate"><span class="pre">'biweight'</span></code> : compute the biweight across input files</p></li>
+<li><p><strong>datadict</strong> (<em>dict</em>) – Dictionary containing data arrays. Each key corresponds to a FITS
+extension or metadata. Flux and variance arrays are stacked along
+the first axis (i.e., shape <code class="docutils literal notranslate"><span class="pre">(n_files,</span> <span class="pre">n_points,</span> <span class="pre">...)</span></code>).</p></li>
+<li><p><strong>dataext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <code class="docutils literal notranslate"><span class="pre">datadict.keys()</span></code> that correspond to flux data.
+Default is <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.</p></li>
+<li><p><strong>varext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Indices of <code class="docutils literal notranslate"><span class="pre">datadict.keys()</span></code> that correspond to variance data.
+Default is <code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">5,</span> <span class="pre">6]</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'biweight'}</em><em>, </em><em>optional</em>) – <p>Method used to combine the fluxes and variances.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'mean'</span></code> : compute the mean across input files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'median'</span></code> : compute the median across input files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'biweight'</span></code> : compute the biweight across input files</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>comb_dicts</strong> – New dictionary with combined flux and variance arrays.
-- Keys in <code class="docutils literal notranslate"><span class="pre">flux_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">var_keys</span></code> contain the combined arrays.
-- Other keys are reduced to the first element of their array.</p>
+<dd class="field-even"><p><p><strong>comb_dicts</strong> – New dictionary with combined flux and variance arrays.</p>
+<ul class="simple">
+<li><p>Keys in <code class="docutils literal notranslate"><span class="pre">flux_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">var_keys</span></code> contain the combined
+arrays.</p></li>
+<li><p>Other keys are reduced to the first element of their array.</p></li>
+</ul>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -334,19 +337,16 @@ corresponding arrays.</p>
 </dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li><p>This function assumes dictionary key order matches <cite>dataext</cite> and</p></li>
+<li><p>This function assumes dictionary key order matches <code class="docutils literal notranslate"><span class="pre">dataext</span></code> and
+<code class="docutils literal notranslate"><span class="pre">varext</span></code>. Since Python 3.7, dictionary order is guaranteed to be
+insertion order.</p></li>
+<li><p>Non-flux/variance arrays (e.g., wavelength grids, headers) are taken
+from the first FITS file. If you want to preserve the full stack,
+you should modify the loop that reduces them to index <code class="docutils literal notranslate"><span class="pre">[0]</span></code>.</p></li>
+<li><p>To prevent modifying the original input, the function creates a
+shallow copy of <code class="docutils literal notranslate"><span class="pre">datadict</span></code>. Arrays themselves are <em>not</em>
+deep-copied.</p></li>
 </ul>
-<dl class="simple">
-<dt><cite>varext</cite>.</dt><dd><p>Since Python 3.7, dictionary order is guaranteed to be insertion order.</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>Non-flux/variance arrays (e.g. wavelength grids, headers) are taken from
-the first FITS file. If you want to preserve the full stack, you should
-modify the loop that reduces them to index <code class="docutils literal notranslate"><span class="pre">[0]</span></code>.</p></li>
-<li><p>To prevent modifying the original input, the function creates a shallow</p></li>
-</ul>
-<p>copy of <code class="docutils literal notranslate"><span class="pre">datadict</span></code>. Arrays themselves are <em>not</em> deep-copied.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">datadict</span> <span class="o">=</span> <span class="p">{</span>
@@ -356,7 +356,7 @@ modify the loop that reduces them to index <code class="docutils literal notrans
 <span class="gp">... </span>    <span class="s2">&quot;WAVELENGTH&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">],</span> <span class="p">[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">800</span><span class="p">]])</span>
 <span class="gp">... </span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">combine_data_full</span><span class="p">(</span><span class="n">datadict</span><span class="p">,</span> <span class="n">dataext</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">varext</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="go">method=&#39;mean&#39;)</span>
+<span class="gp">... </span>                           <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;SCIFLUX&quot;</span><span class="p">]</span>
 <span class="go">array([2.5, 3.5, 4.5])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;VAR&quot;</span><span class="p">]</span>
