@@ -14,6 +14,7 @@ from .operations import combine_data_full
 from .utils import create_fits
 from .utils import extract_allexts
 from .instrument import instrument_dict
+from .handle_frame import operate_process
 
 
 def setup_logging():
@@ -24,15 +25,17 @@ def setup_logging():
         )
 
 
-def get_data(hdu, fluxext, wlext, varext):
-    '''
-    Extracting data from hdu
-    '''
-    datadict = {'flux': np.array(hdu[fluxext].data).astype(np.float64),
-                'wl': np.array(hdu[wlext].data).astype(np.float64)}
-    if varext is not None:
-        datadict['var'] = np.array(hdu[varext].data).astype(np.float64)
-    return datadict
+def process_inputs(file2: str):
+    # Check if file2 is a numbr or string.
+    try:
+        val = float(file2)
+        is_number = True
+    except ValueError:
+        is_number = False
+    if is_number:
+        return val
+    else:
+        return file2
 
 
 def combine_spectra(filesre="*.fits", directory=".",
@@ -74,8 +77,8 @@ def combine_spectra(filesre="*.fits", directory=".",
             datadict, headerdict = instrument.process_data(fname=specfile,
                                                            contnorm=True)
         else:
-            datadict, headerdict = extract_allexts(fname)
-            
+            datadict, headerdict = extract_allexts(fname=specfile)
+
         if headerdict_main is None:
             headerdict_main = headerdict
 
@@ -103,15 +106,29 @@ def combine_spectra(filesre="*.fits", directory=".",
 
 def main():
     parser = read_args()
+    print(parser)
     args = parser.parse_args()
     fnames = args.fnames
     logger.info("Starting the pipeline")
-    # print(args.fnames)
-    # print(fnames)
-    # print(args.opfname)
-    if args.operation == 'combine':
+    logger.info("Flux extensions: {}".format(args.flux))
+    if args.var is not None:
+        logger.info("Variance extensions: {}".format(args.var))
+    if args.wl is not None:
+        logger.info("Wavelength extensions: {}".format(args.wl))
+
+    if args.mode == 'combine':
         combine_spectra(filesre=fnames,
                         opfilename=args.opfname)
+    elif args.mode == 'operation':
+        file1, file2 = fnames
+
+        file2 = process_inputs(file2)
+        operate_process(file1, file2,
+                        args.output,
+                        args.operator,
+                        args.flux,
+                        args.var)
+
     # if args.operation == 'combine':
     #     combine_spectra()
     #

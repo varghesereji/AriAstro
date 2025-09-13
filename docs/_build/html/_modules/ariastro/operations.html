@@ -43,7 +43,7 @@
 
 <div class="viewcode-block" id="ari_operations">
 <a class="viewcode-back" href="../../source/operations.html#ariastro.operations.ari_operations">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ari_operations</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">var_arr1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_arr2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ari_operations</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">var_arr1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_arr2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform element-wise arithmetic operations on two input arrays with</span>
 <span class="sd">    optional variance propagation.</span>
@@ -61,10 +61,10 @@
 <span class="sd">    operation : str, optional</span>
 <span class="sd">        Arithmetic operation to apply (default is &#39;sum&#39;).</span>
 <span class="sd">        Supported values:</span>
-<span class="sd">        - &#39;sum&#39;  : element-wise addition</span>
-<span class="sd">        - &#39;diff&#39; : element-wise subtraction (`arr1 - arr2`)</span>
-<span class="sd">        - &#39;prod&#39; : element-wise multiplication</span>
-<span class="sd">        - &#39;div&#39;  : element-wise division (`arr1 / arr2`)</span>
+<span class="sd">        - &#39;+&#39;  : element-wise addition</span>
+<span class="sd">        - &#39;-&#39; : element-wise subtraction (`arr1 - arr2`)</span>
+<span class="sd">        - &#39;*&#39; : element-wise multiplication</span>
+<span class="sd">        - &#39;/&#39;  : element-wise division (`arr1 / arr2`)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -73,8 +73,8 @@
 <span class="sd">        element-wise operation on `arr1` and `arr2`.</span>
 <span class="sd">        If both variances are provided, returns the propagated variance array</span>
 <span class="sd">        computed according to the operation:</span>
-<span class="sd">        - For &#39;sum&#39; and &#39;diff&#39;: variances are added.</span>
-<span class="sd">        - For &#39;prod&#39; and &#39;div&#39;: variance propagated as</span>
+<span class="sd">        - For &#39;+&#39; and &#39;-&#39;: variances are added.</span>
+<span class="sd">        - For &#39;*&#39; and &#39;/&#39;: variance propagated as</span>
 <span class="sd">    product.</span>
 
 <span class="sd">    Raises</span>
@@ -89,34 +89,35 @@
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; a = np.array([1.0, 2.0, 3.0])</span>
 <span class="sd">    &gt;&gt;&gt; b = np.array([4.0, 5.0, 6.0])</span>
-<span class="sd">    &gt;&gt;&gt; ari_operations(a, b, operation=&#39;sum&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ari_operations(a, b, operation=&#39;+&#39;)</span>
 <span class="sd">    array([5., 7., 9.])</span>
 <span class="sd">    &gt;&gt;&gt; var_a = np.array([0.1, 0.1, 0.1])</span>
 <span class="sd">    &gt;&gt;&gt; var_b = np.array([0.2, 0.2, 0.2])</span>
-<span class="sd">    &gt;&gt;&gt; ari_operations(a, b, var_a, var_b, operation=&#39;sum&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ari_operations(a, b, var_a, var_b, operation=&#39;+&#39;)</span>
 <span class="sd">    array([0.3, 0.3, 0.3])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;sum&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Operation is&quot;</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">:</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">+</span> <span class="n">arr2</span>
-    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;diff&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">-</span> <span class="n">arr2</span>
-    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;prod&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">*</span> <span class="n">arr2</span>
-    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;div&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">/</span> <span class="n">arr2</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Unsupported operation &#39;</span><span class="si">{</span><span class="n">operation</span><span class="si">}</span><span class="s2">&#39;. Supported: &quot;</span><span class="p">,</span>
-            <span class="s2">&quot;&#39;sum&#39;, &#39;diff&#39;, &#39;prod&#39;, &#39;div&#39;.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;&#39;+&#39;, &#39;-&#39;, &#39;*&#39;, &#39;/&#39;.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">var_arr1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">var_arr2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;sum&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;diff&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">):</span>
             <span class="n">var_tot</span> <span class="o">=</span> <span class="n">var_arr1</span> <span class="o">+</span> <span class="n">var_arr2</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;prod&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;div&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">operation</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">):</span>
             <span class="n">var_tot</span> <span class="o">=</span> <span class="n">answer</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">((</span><span class="n">var_arr1</span><span class="o">/</span><span class="n">arr1</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">var_arr2</span><span class="o">/</span><span class="n">arr2</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">answer</span><span class="p">,</span> <span class="n">var_tot</span>
 
-    <span class="k">return</span> <span class="n">answer</span></div>
+    <span class="k">return</span> <span class="n">answer</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
 

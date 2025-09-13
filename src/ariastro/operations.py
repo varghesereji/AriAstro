@@ -8,7 +8,7 @@ Mathematical operations
 '''
 
 
-def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='sum'):
+def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='+'):
     """
     Perform element-wise arithmetic operations on two input arrays with
     optional variance propagation.
@@ -26,10 +26,10 @@ def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='sum'):
     operation : str, optional
         Arithmetic operation to apply (default is 'sum').
         Supported values:
-        - 'sum'  : element-wise addition
-        - 'diff' : element-wise subtraction (`arr1 - arr2`)
-        - 'prod' : element-wise multiplication
-        - 'div'  : element-wise division (`arr1 / arr2`)
+        - '+'  : element-wise addition
+        - '-' : element-wise subtraction (`arr1 - arr2`)
+        - '*' : element-wise multiplication
+        - '/'  : element-wise division (`arr1 / arr2`)
 
     Returns
     -------
@@ -38,8 +38,8 @@ def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='sum'):
         element-wise operation on `arr1` and `arr2`.
         If both variances are provided, returns the propagated variance array
         computed according to the operation:
-        - For 'sum' and 'diff': variances are added.
-        - For 'prod' and 'div': variance propagated as
+        - For '+' and '-': variances are added.
+        - For '*' and '/': variance propagated as
     product.
 
     Raises
@@ -54,34 +54,35 @@ def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='sum'):
     >>> import numpy as np
     >>> a = np.array([1.0, 2.0, 3.0])
     >>> b = np.array([4.0, 5.0, 6.0])
-    >>> ari_operations(a, b, operation='sum')
+    >>> ari_operations(a, b, operation='+')
     array([5., 7., 9.])
     >>> var_a = np.array([0.1, 0.1, 0.1])
     >>> var_b = np.array([0.2, 0.2, 0.2])
-    >>> ari_operations(a, b, var_a, var_b, operation='sum')
+    >>> ari_operations(a, b, var_a, var_b, operation='+')
     array([0.3, 0.3, 0.3])
     """
-    if operation == 'sum':
+    print("Operation is", operation)
+    if operation == '+':
         answer = arr1 + arr2
-    elif operation == 'diff':
+    elif operation == '-':
         answer = arr1 - arr2
-    elif operation == 'prod':
+    elif operation == '*':
         answer = arr1 * arr2
-    elif operation == 'div':
+    elif operation == '/':
         answer = arr1 / arr2
     else:
         raise ValueError(
             f"Unsupported operation '{operation}'. Supported: ",
-            "'sum', 'diff', 'prod', 'div'.")
+            "'+', '-', '*', '/'.")
 
     if (var_arr1 is not None) & (var_arr2 is not None):
-        if (operation == 'sum') or (operation == 'diff'):
+        if (operation == '+') or (operation == '-'):
             var_tot = var_arr1 + var_arr2
-        elif (operation == 'prod') or (operation == 'div'):
+        elif (operation == '*') or (operation == '/'):
             var_tot = answer**2 * ((var_arr1/arr1**2) + (var_arr2/arr2**2))
         return answer, var_tot
 
-    return answer
+    return answer, None
 
 
 '''

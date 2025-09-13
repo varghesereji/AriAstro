@@ -37,7 +37,7 @@
 <span id="operations-module"></span><h1>operations module<a class="headerlink" href="#module-ariastro.operations" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.operations.ari_operations">
-<span class="sig-prename descclassname"><span class="pre">ariastro.operations.</span></span><span class="sig-name descname"><span class="pre">ari_operations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_arr1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_arr2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/operations.html#ari_operations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.operations.ari_operations" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ariastro.operations.</span></span><span class="sig-name descname"><span class="pre">ari_operations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_arr1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_arr2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/operations.html#ari_operations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.operations.ari_operations" title="Link to this definition">¶</a></dt>
 <dd><p>Perform element-wise arithmetic operations on two input arrays with
 optional variance propagation.</p>
 <dl class="field-list simple">
@@ -49,10 +49,10 @@ optional variance propagation.</p>
 <li><p><strong>var_arr2</strong> (<em>numpy.ndarray</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Variance (uncertainty) array corresponding to <cite>arr2</cite>. Default is None.</p></li>
 <li><p><strong>operation</strong> (<em>str</em><em>, </em><em>optional</em>) – Arithmetic operation to apply (default is ‘sum’).
 Supported values:
-- ‘sum’  : element-wise addition
-- ‘diff’ : element-wise subtraction (<cite>arr1 - arr2</cite>)
-- ‘prod’ : element-wise multiplication
-- ‘div’  : element-wise division (<cite>arr1 / arr2</cite>)</p></li>
+- ‘+’  : element-wise addition
+- ‘-’ : element-wise subtraction (<cite>arr1 - arr2</cite>)
+- ‘*’ : element-wise multiplication
+- ‘/’  : element-wise division (<cite>arr1 / arr2</cite>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -61,8 +61,8 @@ Supported values:
 element-wise operation on <cite>arr1</cite> and <cite>arr2</cite>.
 If both variances are provided, returns the propagated variance array
 computed according to the operation:
-- For ‘sum’ and ‘diff’: variances are added.
-- For ‘prod’ and ‘div’: variance propagated as</p></li>
+- For ‘+’ and ‘-’: variances are added.
+- For ‘*’ and ‘/’: variance propagated as</p></li>
 <li><p><em>product.</em></p></li>
 </ul>
 </p>
@@ -78,11 +78,11 @@ computed according to the operation:
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ari_operations</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ari_operations</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 <span class="go">array([5., 7., 9.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">var_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">var_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ari_operations</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">var_a</span><span class="p">,</span> <span class="n">var_b</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ari_operations</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">var_a</span><span class="p">,</span> <span class="n">var_b</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 <span class="go">array([0.3, 0.3, 0.3])</span>
 </pre></div>
 </div>

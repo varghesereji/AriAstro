@@ -37,7 +37,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.utils.create_fits">
 <span class="sig-prename descclassname"><span class="pre">ariastro.utils.</span></span><span class="sig-name descname"><span class="pre">create_fits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datadict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Avg_neid_data.fits'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/utils.html#create_fits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.utils.create_fits" title="Link to this definition">¶</a></dt>
-<dd><p>Create a multi-extension FITS file from a dictionary of data arrays and headers.</p>
+<dd><p>Create a multi-extension FITS file from a dictionary of data arrays and
+headers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -84,7 +85,21 @@ listed in <cite>tablehdu</cite> (currently only <cite>‘ACTIVITY’</cite>).</p
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.utils.extract_allexts">
 <span class="sig-prename descclassname"><span class="pre">ariastro.utils.</span></span><span class="sig-name descname"><span class="pre">extract_allexts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/utils.html#extract_allexts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.utils.extract_allexts" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Extract all extensions from a FITS file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – Path to the FITS file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>datadict</strong> (<em>dict</em>) – Dictionary mapping extension keywords to numpy arrays
+containing the data.</p></li>
+<li><p><strong>headerdict</strong> (<em>dict</em>) – Dictionary mapping extension keywords to FITS headers.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.utils.extract_data_header">

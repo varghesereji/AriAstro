@@ -5,34 +5,50 @@ def read_args():
     '''
     Read the argument while execution.
     '''
+    parent = argparse.ArgumentParser(add_help=False)
+    parent.add_argument("--fnames", nargs="+", required=True,
+                        help="Input file names")
+    parent.add_argument("--output", required=True,
+                        help="Output file name")
+    parent.add_argument("--flux", nargs="+", default=0,
+                        help="Extensions of flux")
+    parent.add_argument("--var", nargs="+", default=None,
+                        help="Extensions of variance")
+    parent.add_argument("--wl", nargs="+", default=None,
+                        help="Extensions of wavelength")
 
     parser = argparse.ArgumentParser(description="Input data to combine")
-    parser.add_argument('operation', type=str,
-                        choices=["operation", "combine"],
-                        help="Required operation.")
-
-    parser.add_argument('--fnames', required=True, nargs="+",
-                        help="Input file names")
-    parser.add_argument('--opfname', required=True,
-                        help="Filename for output")
-    parser.add_argument(
-        '--instrument',
-        type=str,
-        help="If the data is from any specific inistrument (eg:NEID)"
-    )
 
     subparsers = parser.add_subparsers(dest="mode", required=True,
                                        help="Choose mode")
+    binary_parser = subparsers.add_parser("operation", parents=[parent],
+                                          help="Binary operations on data")
+    binary_parser.add_argument("operator",
+                               choices=["+", "-", "*", "/"],
+                               help="Binary operation (+,-,*,/)")
 
-   # --- operation subcommand ---
-    op_parser = subparsers.add_parser("operation", help="Perform arithmetic operation")
-    op_parser.add_argument("operator", choices=["+", "-", "*", "/"],
-                           help="Arithmetic operator")
+    # binary_parser.add_argument("--fnames", nargs=2, required=True,
+    #                            help="Two input files for binary operation")
+    # binary_parser.add_argument("--output", required=True,
+    #                            help="Output file name")
 
-    # --- combine subcommand ---
-    comb_parser = subparsers.add_parser("combine", help="Combine data")
-    comb_parser.add_argument("method", choices=["mean", "median", "biweight"],
-                             help="Combination method")
+    # For combining
+    combine_parser = subparsers.add_parser("combine", parents=[parent],
+                                           help="Combine multiple data files")
+    combine_parser.add_argument("method",
+                                choices=["mean", "median", "biweight"],
+                                help="Method to combine data")
+    # combine_parser.add_argument("--fnames", nargs="+", required=True,
+    #                             help="Input files to combine")
+    # combine_parser.add_argument("--output", required=True,
+    #                             help="Output file name")
+
+    combine_parser.add_argument(
+        '--instrument',
+        type=str, default=None,
+        help="If the data is from any specific inistrument (eg:NEID)"
+    )
+
     return parser
 
 # End
