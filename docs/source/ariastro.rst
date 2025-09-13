@@ -60,6 +60,14 @@ ariastro.utils module
    :show-inheritance:
    :undoc-members:
 
+ariastro.handle_frame module
+----------------------------
+.. automodule:: ariastro.handle_frame
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+
 Module contents
 ---------------
 
