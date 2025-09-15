@@ -39,17 +39,6 @@
 <section id="module-ariastro.ariastro_main">
 <span id="ariastro-ariastro-main-module"></span><h2>ariastro.ariastro_main module<a class="headerlink" href="#module-ariastro.ariastro_main" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ariastro.ariastro_main.combine_spectra">
-<span class="sig-prename descclassname"><span class="pre">ariastro.ariastro_main.</span></span><span class="sig-name descname"><span class="pre">combine_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filesre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*.fits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Comb_spectra.fits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrumentname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">5,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wlext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">8,</span> <span class="pre">9)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(173,</span> <span class="pre">52)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/ariastro_main.html#combine_spectra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.ariastro_main.combine_spectra" title="Link to this definition">¶</a></dt>
-<dd><p>Function to combine spectra.
-Input
-——-
-filesre: Regular expression for the files.
-directory: data directory.
-fluxext: extension for flux array.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="ariastro.ariastro_main.main">
 <span class="sig-prename descclassname"><span class="pre">ariastro.ariastro_main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/ariastro_main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.ariastro_main.main" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -136,6 +125,11 @@ multiplicatively to the wavelength array.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ariastro.instrument.Handle_NEID.fits_extensions">
+<span class="sig-name descname"><span class="pre">fits_extensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/instrument.html#Handle_NEID.fits_extensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.instrument.Handle_NEID.fits_extensions" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ariastro.instrument.Handle_NEID.getfull_data">
@@ -379,6 +373,17 @@ deep-copied.</p></li>
 <section id="module-ariastro.spectral_utils">
 <span id="ariastro-spectral-utils-module"></span><h2>ariastro.spectral_utils module<a class="headerlink" href="#module-ariastro.spectral_utils" title="Link to this heading">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="ariastro.spectral_utils.combine_spectra">
+<span class="sig-prename descclassname"><span class="pre">ariastro.spectral_utils.</span></span><span class="sig-name descname"><span class="pre">combine_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filesre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*.fits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Comb_spectra.fits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrumentname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">5,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wlext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">8,</span> <span class="pre">9)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(173,</span> <span class="pre">52)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/spectral_utils.html#combine_spectra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.spectral_utils.combine_spectra" title="Link to this definition">¶</a></dt>
+<dd><p>Function to combine spectra.
+Input
+——-
+filesre: Regular expression for the files.
+directory: data directory.
+fluxext: extension for flux array.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ariastro.spectral_utils.continuum_normalize">
 <span class="sig-prename descclassname"><span class="pre">ariastro.spectral_utils.</span></span><span class="sig-name descname"><span class="pre">continuum_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datadict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_exts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_exts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[4]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl_exts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[7]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/spectral_utils.html#continuum_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.spectral_utils.continuum_normalize" title="Link to this definition">¶</a></dt>
 <dd><p>Perform continuum normalization on flux and variance arrays in
@@ -528,6 +533,81 @@ extract the data and header.</p>
 </section>
 <section id="module-ariastro.handle_frame">
 <span id="ariastro-handle-frame-module"></span><h2>ariastro.handle_frame module<a class="headerlink" href="#module-ariastro.handle_frame" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ariastro.handle_frame.combine_process">
+<span class="sig-prename descclassname"><span class="pre">ariastro.handle_frame.</span></span><span class="sig-name descname"><span class="pre">combine_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/handle_frame.html#combine_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.handle_frame.combine_process" title="Link to this definition">¶</a></dt>
+<dd><p>Combine spectral or image data from multiple FITS files into a single
+output FITS file.</p>
+<p>This function supports two modes of operation:
+1. If an instrument is specified, it calls an instrument-specific routine</p>
+<blockquote>
+<div><p>(<cite>combine_spectra</cite>).</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Otherwise, it manually reads data arrays and (optionally) variance
+arrays from the input files, combines them using the given method,
+and writes the results into a new FITS file.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>str</em>) – <p>Input FITS files. Can be:
+- A list of FITS file paths.
+- A string specifying a pattern/regular expression to match files in</p>
+<blockquote>
+<div><p><cite>path</cite>.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>opfilename</strong> (<em>str</em>) – Output FITS filename to write the combined data.</p></li>
+<li><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to search for FITS files if <cite>files</cite> is provided as a string
+pattern.
+Default is <cite>‘.’</cite>.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Combination method for data arrays (e.g., ‘mean’, ‘median’).
+Passed to <cite>combine_data</cite>. Default is <cite>‘mean’</cite>.</p></li>
+<li><p><strong>fluxext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – List of FITS extensions containing flux (or image) data.
+Default is <cite>[0]</cite>.</p></li>
+<li><p><strong>varext</strong> (<em>list</em><em> of </em><em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – List of FITS extensions containing variance data corresponding
+to <cite>fluxext</cite>. If <cite>None</cite>, variance is not processed. Default is <cite>None</cite>.</p></li>
+<li><p><strong>instrument</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Instrument name. If provided, the function calls
+<cite>combine_spectra</cite> instead of the default combination logic.
+Default is <cite>None</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The combined FITS data is written directly to <cite>opfilename</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>instrument</cite> is not <cite>None</cite>, this function delegates to
+<cite>combine_spectra</cite> and returns immediately.</p></li>
+<li><p>The combination of data is handled by <cite>combine_data</cite>, which is expected
+to return <cite>(result, variance)</cite>.</p></li>
+<li><p>The variance extension in the output file is only written if
+<cite>varext</cite> is provided.</p></li>
+<li><p>The primary HDU (extension 0) is replaced if <cite>fluxext</cite> includes 0.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>Combine the primary extension of a list of FITS files using the mean:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">combine_process</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;file1.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.fits&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">opfilename</span><span class="o">=</span><span class="s2">&quot;combined.fits&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">fluxext</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Combine flux and variance from extensions 1 and 2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">combine_process</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs1.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;obs2.fits&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">opfilename</span><span class="o">=</span><span class="s2">&quot;combined.fits&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">fluxext</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">varext</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.handle_frame.operate_process">
 <span class="sig-prename descclassname"><span class="pre">ariastro.handle_frame.</span></span><span class="sig-name descname"><span class="pre">operate_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/handle_frame.html#operate_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.handle_frame.operate_process" title="Link to this definition">¶</a></dt>

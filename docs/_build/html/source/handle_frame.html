@@ -14,6 +14,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="utils module" href="utils.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -33,6 +34,81 @@
             
   <section id="module-ariastro.handle_frame">
 <span id="handle-frame"></span><h1>handle_frame<a class="headerlink" href="#module-ariastro.handle_frame" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="ariastro.handle_frame.combine_process">
+<span class="sig-prename descclassname"><span class="pre">ariastro.handle_frame.</span></span><span class="sig-name descname"><span class="pre">combine_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/handle_frame.html#combine_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.handle_frame.combine_process" title="Link to this definition">¶</a></dt>
+<dd><p>Combine spectral or image data from multiple FITS files into a single
+output FITS file.</p>
+<p>This function supports two modes of operation:
+1. If an instrument is specified, it calls an instrument-specific routine</p>
+<blockquote>
+<div><p>(<cite>combine_spectra</cite>).</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Otherwise, it manually reads data arrays and (optionally) variance
+arrays from the input files, combines them using the given method,
+and writes the results into a new FITS file.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>str</em>) – <p>Input FITS files. Can be:
+- A list of FITS file paths.
+- A string specifying a pattern/regular expression to match files in</p>
+<blockquote>
+<div><p><cite>path</cite>.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>opfilename</strong> (<em>str</em>) – Output FITS filename to write the combined data.</p></li>
+<li><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to search for FITS files if <cite>files</cite> is provided as a string
+pattern.
+Default is <cite>‘.’</cite>.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Combination method for data arrays (e.g., ‘mean’, ‘median’).
+Passed to <cite>combine_data</cite>. Default is <cite>‘mean’</cite>.</p></li>
+<li><p><strong>fluxext</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – List of FITS extensions containing flux (or image) data.
+Default is <cite>[0]</cite>.</p></li>
+<li><p><strong>varext</strong> (<em>list</em><em> of </em><em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – List of FITS extensions containing variance data corresponding
+to <cite>fluxext</cite>. If <cite>None</cite>, variance is not processed. Default is <cite>None</cite>.</p></li>
+<li><p><strong>instrument</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Instrument name. If provided, the function calls
+<cite>combine_spectra</cite> instead of the default combination logic.
+Default is <cite>None</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The combined FITS data is written directly to <cite>opfilename</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>instrument</cite> is not <cite>None</cite>, this function delegates to
+<cite>combine_spectra</cite> and returns immediately.</p></li>
+<li><p>The combination of data is handled by <cite>combine_data</cite>, which is expected
+to return <cite>(result, variance)</cite>.</p></li>
+<li><p>The variance extension in the output file is only written if
+<cite>varext</cite> is provided.</p></li>
+<li><p>The primary HDU (extension 0) is replaced if <cite>fluxext</cite> includes 0.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>Combine the primary extension of a list of FITS files using the mean:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">combine_process</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;file1.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.fits&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">opfilename</span><span class="o">=</span><span class="s2">&quot;combined.fits&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">fluxext</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Combine flux and variance from extensions 1 and 2:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">combine_process</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs1.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;obs2.fits&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">opfilename</span><span class="o">=</span><span class="s2">&quot;combined.fits&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">fluxext</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">varext</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ariastro.handle_frame.operate_process">
 <span class="sig-prename descclassname"><span class="pre">ariastro.handle_frame.</span></span><span class="sig-name descname"><span class="pre">operate_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fluxext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ariastro/handle_frame.html#operate_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ariastro.handle_frame.operate_process" title="Link to this definition">¶</a></dt>
@@ -128,16 +204,25 @@ the operation.</p></li>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ariastro_main.html">ariastro_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations.html">operations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">handle_frame</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api.html">API Reference</a><ul>
+      <li>Previous: <a href="utils.html" title="previous chapter">utils module</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
