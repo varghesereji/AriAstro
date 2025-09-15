@@ -1,5 +1,10 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
 from astropy.io import fits
 from .operations import ari_operations
+from .operations import combine_data
+from .spectral_utils import combine_spectra
 
 
 def operate_process(ip1, ip2,
@@ -40,7 +45,7 @@ def operate_process(ip1, ip2,
     Notes
     -----
     - For each extension in ``fluxext``:
-      
+
       1. Data are read from ``ip1`` and ``ip2``.
       2. The operation is applied using ``ari_operations``.
       3. Results are stored in the output HDUList.
@@ -116,5 +121,135 @@ def operate_process(ip1, ip2,
             )
     hdul.writeto(opfilename, overwrite=True)
 
+
+def combine_process(files,
+                    opfilename,
+                    path='.',
+                    method='mean',
+                    fluxext=[0],
+                    varext=None,
+                    instrument=None
+                    ):
+    """
+    Combine spectral or image data from multiple FITS files into a single
+    output FITS file.
+
+    This function supports two modes of operation:
+    1. If an instrument is specified, it calls an instrument-specific routine
+       (`combine_spectra`).
+    2. Otherwise, it manually reads data arrays and (optionally) variance
+       arrays from the input files, combines them using the given method,
+       and writes the results into a new FITS file.
+
+    Parameters
+    ----------
+    files : list of str or str
+        Input FITS files. Can be:
+        - A list of FITS file paths.
+        - A string specifying a pattern/regular expression to match files in
+          `path`.
+
+    opfilename : str
+        Output FITS filename to write the combined data.
+
+    path : str, optional
+        Path to search for FITS files if `files` is provided as a string
+        pattern.
+        Default is `'.'`.
+
+    method : str, optional
+        Combination method for data arrays (e.g., 'mean', 'median').
+        Passed to `combine_data`. Default is `'mean'`.
+
+    fluxext : list of int, optional
+        List of FITS extensions containing flux (or image) data.
+        Default is `[0]`.
+
+    varext : list of int or None, optional
+        List of FITS extensions containing variance data corresponding
+        to `fluxext`. If `None`, variance is not processed. Default is `None`.
+
+    instrument : str or None, optional
+        Instrument name. If provided, the function calls
+        `combine_spectra` instead of the default combination logic.
+        Default is `None`.
+
+    Returns
+    -------
+    None
+        The combined FITS data is written directly to `opfilename`.
+
+    Notes
+    -----
+    - If `instrument` is not `None`, this function delegates to
+      `combine_spectra` and returns immediately.
+    - The combination of data is handled by `combine_data`, which is expected
+      to return `(result, variance)`.
+    - The variance extension in the output file is only written if
+      `varext` is provided.
+    - The primary HDU (extension 0) is replaced if `fluxext` includes 0.
+
+    Examples
+    --------
+    Combine the primary extension of a list of FITS files using the mean:
+
+    >>> combine_process(files=["file1.fits", "file2.fits"],
+    ...                 opfilename="combined.fits",
+    ...                 fluxext=[0],
+    ...                 method="mean")
+
+    Combine flux and variance from extensions 1 and 2:
+
+    >>> combine_process(files=["obs1.fits", "obs2.fits"],
+    ...                 opfilename="combined.fits",
+    ...                 fluxext=[1],
+    ...                 varext=[2],
+    ...                 method="median")
+    """
+    if instrument is not None:
+        combine_spectra(files, opfilename=opfilename,
+                        instrumentname=instrument,
+                        fluxext=fluxext,
+                        varext=varext)
+        return
+
+    primary_hdu = fits.PrimaryHDU()
+    hdul = fits.HDUList([primary_hdu])
+    if isinstance(files, list):
+        files_list = files
+    elif isinstance(files, str):
+        files_path = Path(path)
+        files_list = files_path.glib(files)
+    else:
+        print("Enter either files list or the regular expression")
+
+    for index, ext in enumerate(fluxext):
+        ext = int(ext)
+        header = fits.getheader(files_list[0], ext=ext)
+        data_array = []
+        var_array = []
+        for fname in files_list:
+            data = fits.getdata(fname, ext=ext)
+            data_array.append(data)
+            if varext is not None:
+                var = fits.getdata(fname, ext=int(varext[index]))
+                var_array.append(var)
+        result, variance = combine_data(dataarr=data_array,
+                                        var=var_array,
+                                        method=method)
+        if int(ext) == 0:
+            hdul[0] = fits.PrimaryHDU(result, header=header)
+        else:
+            imagehdu = fits.ImageHDU(result, header=header)
+            hdul.append(imagehdu)
+        if varext is not None:
+            hdul.append(
+                fits.ImageHDU(var,
+                              header=fits.getheader(
+                                  files_list[0], ext=int(varext[index])
+                                  )
+                              )
+                )
+        hdul.writeto(opfilename, overwrite=True)
 
 # End

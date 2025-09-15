@@ -1,7 +1,16 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
 import numpy as np
 import astropy.units as u
 from scipy.interpolate import CubicSpline
+from collections import defaultdict
 from .logger import logger
+from .utils import create_fits
+from .instrument import instrument_dict
+from .utils import extract_allexts
+from .operations import combine_data_full
+
 try:
     from specutils.spectra import Spectrum
 except ImportError:
@@ -184,5 +193,72 @@ def continuum_normalize(datadict, flux_exts=[1],
         datadict[flux_key] = flux_array
 
     return datadict
+
+
+def combine_spectra(filesre="*.fits", directory=".",
+                    opfilename="Comb_spectra.fits",
+                    instrumentname=None,
+                    fluxext=(1, 2, 3),
+                    varext=(4, 5, 6),
+                    wlext=(7, 8, 9),
+                    orders=(173, 52)):
+    '''
+    Function to combine spectra.
+    Input
+    -------
+    filesre: Regular expression for the files.
+    directory: data directory.
+    fluxext: extension for flux array.
+    '''
+    # print(filesre)
+    if isinstance(filesre, list):
+        files_list = filesre
+    elif isinstance(filesre, str):
+        files_path = Path(directory)
+        files_list = files_path.glob(filesre)
+    else:
+        print("Enter either files list or the regular expression")
+        return
+
+    data_dict = defaultdict(list)
+    headerdict_main = None
+    file_list = []
+    if instrumentname is not None:
+        instrument = instrument_dict[instrumentname]()
+        fluxext, varext, wlext = instrument.fits_extensions
+    for cro, specfile in enumerate(files_list):
+        specfile = Path(specfile)
+        # print(specfile)
+        logger.info("{} {}".format(cro, specfile))
+        file_list.append(specfile.name)
+        if instrumentname is not None:
+            datadict, headerdict = instrument.process_data(fname=specfile,
+                                                           contnorm=True)
+        else:
+            datadict, headerdict = extract_allexts(fname=specfile)
+
+        if headerdict_main is None:
+            headerdict_main = headerdict
+
+        for hduname, data in datadict.items():
+            # print(hduname)
+            data_dict[hduname].append(data)
+    # print("data_dict", np.array(data_dict["SCIWAVE"])[:, 50])
+    interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
+    # print("interp_data_dict", np.array(interp_data_dict["SCIFLUX"]).shape)
+    combined_dict = combine_data_full(interp_data_dict)
+    # # print(combined_dict)
+    dict_keys = list(headerdict_main.keys())
+
+    headerdict_main[dict_keys[0]]['HISTORY'] = "Combined {}".format(
+        list(file_list))
+
+    logger.info("Combining spectra")
+    create_fits(combined_dict, headerdict_main,
+                filename=Path(directory) / opfilename)
+    logger.info("Combined spectra")
+    # print(header_dict)
+    del data_dict
+    # print(np.array(flux).shape)
 
 # End

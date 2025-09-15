@@ -2,7 +2,7 @@
 import numpy as np
 
 from .utils import extract_allexts
-from .spectral_utils import continuum_normalize
+
 
 
 class Handle_NEID:
@@ -40,6 +40,12 @@ class Handle_NEID:
     def __init__(self):
         """Initialize the NEID handler instance."""
         pass
+
+    def fits_extensions():
+        fluxext = [1, 2, 3]
+        varext = [4, 5, 6]
+        wlext = [7, 8, 9]
+        return fluxext, varext, wlext
 
     def getfull_data(self, fname):
         """
@@ -158,6 +164,7 @@ class Handle_NEID:
             datadict[var_kw] = corr_var
             datadict[blaze_kw] = newblaze
         if contnorm:
+            from .spectral_utils import continuum_normalize
             datadict = continuum_normalize(datadict, sci_ext, var_ext, wl_ext)
 
         return datadict, headerdict

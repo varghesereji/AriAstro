@@ -1,20 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from pathlib import Path
-from astropy.io import fits
-import numpy as np
 import logging
 
-from collections import defaultdict
 
 from .logger import logger
-from .spectral_utils import interpolation_spectra
+
 from .setups import read_args
-from .operations import combine_data_full
-from .utils import create_fits
-from .utils import extract_allexts
-from .instrument import instrument_dict
+
+
 from .handle_frame import operate_process
+from .handle_frame import combine_process
 
 
 def setup_logging():
@@ -38,72 +33,6 @@ def process_inputs(file2: str):
         return file2
 
 
-def combine_spectra(filesre="*.fits", directory=".",
-                    opfilename="Comb_spectra.fits",
-                    instrumentname=None,
-                    fluxext=(1, 2, 3),
-                    varext=(4, 5, 6),
-                    wlext=(7, 8, 9),
-                    orders=(173, 52)):
-    '''
-    Function to combine spectra.
-    Input
-    -------
-    filesre: Regular expression for the files.
-    directory: data directory.
-    fluxext: extension for flux array.
-    '''
-    # print(filesre)
-    if isinstance(filesre, list):
-        files_list = filesre
-    elif isinstance(filesre, str):
-        files_path = Path(directory)
-        files_list = files_path.glob(filesre)
-    else:
-        print("Enter either files list or the regular expression")
-        return
-
-    data_dict = defaultdict(list)
-    headerdict_main = None
-    file_list = []
-    for cro, specfile in enumerate(files_list):
-        specfile = Path(specfile)
-        # print(specfile)
-        logger.info("{} {}".format(cro, specfile))
-        file_list.append(specfile.name)
-        if instrumentname is not None:
-            instrument = instrument_dict[instrumentname]()
-
-            datadict, headerdict = instrument.process_data(fname=specfile,
-                                                           contnorm=True)
-        else:
-            datadict, headerdict = extract_allexts(fname=specfile)
-
-        if headerdict_main is None:
-            headerdict_main = headerdict
-
-        for hduname, data in datadict.items():
-            # print(hduname)
-            data_dict[hduname].append(data)
-    # print("data_dict", np.array(data_dict["SCIWAVE"])[:, 50])
-    interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
-    # print("interp_data_dict", np.array(interp_data_dict["SCIFLUX"]).shape)
-    combined_dict = combine_data_full(interp_data_dict)
-    # # print(combined_dict)
-    dict_keys = list(headerdict_main.keys())
-
-    headerdict_main[dict_keys[0]]['HISTORY'] = "Combined {}".format(
-        list(file_list))
-
-    logger.info("Combining spectra")
-    create_fits(combined_dict, headerdict_main,
-                filename=Path(directory) / opfilename)
-    logger.info("Combined spectra")
-    # print(header_dict)
-    del data_dict
-    # print(np.array(flux).shape)
-
-
 def main():
     parser = read_args()
     print(parser)
@@ -117,8 +46,14 @@ def main():
         logger.info("Wavelength extensions: {}".format(args.wl))
 
     if args.mode == 'combine':
-        combine_spectra(filesre=fnames,
-                        opfilename=args.opfname)
+        print(fnames)
+        combine_process(fnames,
+                        args.output,
+                        method=args.method,
+                        fluxext=args.flux,
+                        varext=args.var,
+                        instrument=args.instrument
+                        )
     elif args.mode == 'operation':
         file1, file2 = fnames
 
@@ -129,10 +64,8 @@ def main():
                         args.flux,
                         args.var)
 
-    # if args.operation == 'combine':
-    #     combine_spectra()
-    #
-
 
 if __name__ == '__main__':
     setup_logging()
+
+# End

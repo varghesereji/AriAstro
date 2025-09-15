@@ -27,10 +27,6 @@ def read_args():
                                choices=["+", "-", "*", "/"],
                                help="Binary operation (+,-,*,/)")
 
-    # binary_parser.add_argument("--fnames", nargs=2, required=True,
-    #                            help="Two input files for binary operation")
-    # binary_parser.add_argument("--output", required=True,
-    #                            help="Output file name")
 
     # For combining
     combine_parser = subparsers.add_parser("combine", parents=[parent],
@@ -38,15 +34,11 @@ def read_args():
     combine_parser.add_argument("method",
                                 choices=["mean", "median", "biweight"],
                                 help="Method to combine data")
-    # combine_parser.add_argument("--fnames", nargs="+", required=True,
-    #                             help="Input files to combine")
-    # combine_parser.add_argument("--output", required=True,
-    #                             help="Output file name")
 
     combine_parser.add_argument(
         '--instrument',
         type=str, default=None,
-        help="If the data is from any specific inistrument (eg:NEID)"
+        help="If the data is from any specific instrument (eg:NEID)"
     )
 
     return parser

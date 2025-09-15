@@ -61,7 +61,6 @@ def ari_operations(arr1, arr2, var_arr1=None, var_arr2=None, operation='+'):
     >>> ari_operations(a, b, var_a, var_b, operation='+')
     array([0.3, 0.3, 0.3])
     """
-    print("Operation is", operation)
     if operation == '+':
         answer = arr1 + arr2
     elif operation == '-':
@@ -131,24 +130,25 @@ def combine_data(dataarr, var=None, method='mean'):
     - The biweight method is less sensitive to outliers than the mean
       or median.
     """
-    # print('dataarr', dataarr)
+    print('dataarr', dataarr)
     dataarr = np.array(dataarr)
     N = dataarr.shape[0]
+    print("Shape", N)
+    print(method)
     if method == 'mean':
         comb_data = np.nanmean(dataarr, axis=0)
     elif method == 'median':
         comb_data = np.nanmedian(dataarr, axis=0)
     elif method == 'biweight':
         comb_data = biweight_location(dataarr, axis=0)
-
+    print(comb_data)
     # Propagating error.
     # Treating the error propagation
     # as mean for median also.
     if var is not None:
         comb_var = np.sum(var, axis=0) / N**2
         return comb_data, comb_var
-
-    return comb_data
+    return comb_data, None
 
 
 def combine_data_full(datadict, dataext=[1, 2, 3],
