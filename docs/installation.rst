@@ -14,5 +14,19 @@ Or from source:
    cd AriAstro
    pip install .
 
+NB: Recommended to install the package in a new environment.
 
+Steps to create an environment
+
+To create, enter
+
+.. code-block:: bash
+
+   python3 -m venv /path/to/env
  
+To activate:
+
+.. code-block:: bash
+
+   source /path/to/env/bin/activate
+
