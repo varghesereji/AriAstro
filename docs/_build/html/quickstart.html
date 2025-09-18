@@ -40,8 +40,17 @@
 </pre></div>
 </div>
 <p>To get help, enter</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ariastro<span class="w"> </span>--help
+</pre></div>
+</div>
 <p>To combine file1.fits, file2.fits, file3.fits …, with mean, enter</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ariastro<span class="w"> </span>combine<span class="w"> </span>mean<span class="w"> </span>--fnames<span class="w"> </span>file1.fits<span class="w"> </span>file2.fits<span class="w"> </span>file3.fits<span class="w"> </span>--output<span class="w"> </span><span class="o">[</span>OUTPUT_NAME<span class="o">]</span><span class="w"> </span>--flux<span class="w"> </span><span class="o">[</span>FLUX<span class="w"> </span>EXTENSIONS<span class="o">]</span><span class="w"> </span>--var<span class="w"> </span><span class="o">[</span>VARIANCE<span class="w"> </span>EXTENSIONS<span class="o">]</span>
+</pre></div>
+</div>
 <p>You can also use regular expression to list the files.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ariastro<span class="w"> </span>combine<span class="w"> </span>mean<span class="w"> </span>--fnames<span class="w"> </span>file*.fits<span class="w"> </span>--output<span class="w"> </span><span class="o">[</span>OUTPUT_NAME<span class="o">]</span><span class="w"> </span>--flux<span class="w"> </span><span class="o">[</span>FLUX<span class="w"> </span>EXTENSIONS<span class="o">]</span><span class="w"> </span>--var<span class="w"> </span><span class="o">[</span>VARIANCE<span class="w"> </span>EXTENSIONS<span class="o">]</span>
+</pre></div>
+</div>
 </section>
 
 
