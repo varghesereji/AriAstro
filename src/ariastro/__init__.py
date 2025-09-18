@@ -7,3 +7,4 @@ from .operations import combine_data_full
 
 from .handle_frame import combine_process
 from .handle_frame import operate_process
+from .handle_frame import divide_smoothgradient

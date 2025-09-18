@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import numpy as np
+from scipy.ndimage import filters
+
 from pathlib import Path
 from astropy.io import fits
 from .operations import ari_operations
@@ -135,6 +138,7 @@ def combine_process(files,
     output FITS file.
 
     This function supports two modes of operation:
+
     1. If an instrument is specified, it calls an instrument-specific routine
        (`combine_spectra`).
     2. Otherwise, it manually reads data arrays and (optionally) variance
@@ -145,6 +149,7 @@ def combine_process(files,
     ----------
     files : list of str or str
         Input FITS files. Can be:
+
         - A list of FITS file paths.
         - A string specifying a pattern/regular expression to match files in
           `path`.
@@ -252,5 +257,101 @@ def combine_process(files,
                               )
                 )
         hdul.writeto(opfilename, overwrite=True)
+
+
+def divide_smoothgradient(filename,
+                          opfilename,
+                          path='.',
+                          medsmoothsize=(25, 51),
+                          fluxext=[0],
+                          varext=None):
+    """
+    Apply a median filter to an astronomical FITS image and normalize it
+    by dividing the original image by the smoothed background gradient.
+
+    This is typically used to remove large-scale background gradients
+    while preserving smaller-scale features in the image.
+
+    Parameters
+    ----------
+    filename : str
+        Input FITS file containing the data to be processed.
+    opfilename : str
+        Output FITS file where the processed result will be saved.
+    path : str, optional
+        Path to the input file. Default is the current directory ('.').
+    medsmoothsize : tuple of int, optional
+        Size of the median filter window. Larger sizes smooth more strongly.
+        Default is (25, 51).
+    fluxext : list of int, optional
+        List of extensions in the FITS file that contain the flux/image data
+        to be normalized. Default is [0] (primary extension).
+    varext : list of int, optional
+        List of extensions corresponding to variance maps for each flux extension.
+        If provided, the variance maps will also be normalized by the squared
+        smoothed gradient. Default is None.
+
+    Notes
+    -----
+    - The function clips the input image values to avoid division by zero:
+      `inputimgdata = np.clip(inputimgdata, 1, np.max(inputimgdata+1))`.
+    - Median filtering may be memory intensive. If a `MemoryError` occurs,
+      try using a smaller `medsmoothsize`.
+    - For each extension processed:
+        * The flux is divided by the median-smoothed version of itself.
+        * If variance data are provided, they are divided by the square
+          of the median-smoothed image.
+    - The output FITS file contains the normalized data (and variance maps,
+      if applicable) with updated headers recording the operation history.
+
+    Output
+    ------
+    FITS file
+        A FITS file (`opfilename`) containing the normalized image(s) and
+        optional variance extensions.
+
+    Example
+    -------
+    >>> divide_smoothgradient("input.fits", "output.fits",
+    ...                       medsmoothsize=(25, 51),
+    ...                       fluxext=[0, 1],
+    ...                       varext=[2, 3])
+    """
+    primary_hdu = fits.PrimaryHDU()
+    hdul = fits.HDUList([primary_hdu])
+    for index, ext in enumerate(fluxext):
+        inputimgdata = fits.getdata(filename, ext=int(ext))
+        inputimgdata = np.clip(inputimgdata, 1, np.max(inputimgdata+1))
+        print('It takes sometime (> 100 sec) to finish. Wait ...')
+        try:
+            smoothGrad = filters.median_filter(inputimgdata,
+                                               size=medsmoothsize)
+
+        except MemoryError:
+            print("*** MEMORY ERROR : Skipping median filter Division ***")
+            print("Try giving a smaller smooth size for medial filtter insted")
+        else:
+            header = fits.getheader(filename, ext=0)
+            NormContdata = inputimgdata / smoothGrad
+            if varext is not None:
+                var = fits.getdata(filename, ext=int(varext[index]))
+                NormCont_var = var / smoothGrad ** 2
+            header['HISTORY'] = 'Divided median filter size: {}'.format(
+                medsmoothsize)
+            if int(ext) == 0:
+                hdul[0] = fits.PrimaryHDU(NormContdata, header=header)
+            else:
+                imagehdu = fits.ImageHDU(NormContdata, header=header)
+                hdul.append(imagehdu)
+            if varext is not None:
+                hdul.append(
+                    fits.ImageHDU(NormCont_var,
+                                  header=fits.getheader(
+                                      filename, ext=int(varext[index])
+                                      )
+                                  )
+                    )
+            hdul.writeto(opfilename, overwrite=True)
+
 
 # End
