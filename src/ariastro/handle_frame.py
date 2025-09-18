@@ -237,6 +237,7 @@ def combine_process(files,
         result, variance = combine_data(dataarr=data_array,
                                         var=var_array,
                                         method=method)
+        header["HISTORY"] = method + str(files_list)
         if int(ext) == 0:
             hdul[0] = fits.PrimaryHDU(result, header=header)
         else:

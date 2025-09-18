@@ -130,18 +130,14 @@ def combine_data(dataarr, var=None, method='mean'):
     - The biweight method is less sensitive to outliers than the mean
       or median.
     """
-    print('dataarr', dataarr)
     dataarr = np.array(dataarr)
     N = dataarr.shape[0]
-    print("Shape", N)
-    print(method)
     if method == 'mean':
         comb_data = np.nanmean(dataarr, axis=0)
     elif method == 'median':
         comb_data = np.nanmedian(dataarr, axis=0)
     elif method == 'biweight':
         comb_data = biweight_location(dataarr, axis=0)
-    print(comb_data)
     # Propagating error.
     # Treating the error propagation
     # as mean for median also.
