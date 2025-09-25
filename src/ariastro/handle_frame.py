@@ -239,9 +239,13 @@ def combine_process(files,
             if varext is not None:
                 var = fits.getdata(fname, ext=int(varext[index]))
                 var_array.append(var)
-        result, variance = combine_data(dataarr=data_array,
-                                        var=var_array,
-                                        method=method)
+        if len(files_list) == 1:
+            result = data_array[0]
+            variance = var_array[0]
+        else:
+            result, variance = combine_data(dataarr=data_array,
+                                            var=var_array,
+                                            method=method)
         header["HISTORY"] = method + str(files_list)
         if int(ext) == 0:
             hdul[0] = fits.PrimaryHDU(result, header=header)
