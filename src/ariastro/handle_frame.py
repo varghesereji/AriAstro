@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import astroscrappy
 from scipy.ndimage import filters
 
 from pathlib import Path
@@ -88,7 +89,9 @@ def operate_process(ip1, ip2,
         header = fits.getheader(ip1, ext=ext)
         hdul1 = fits.open(ip1)
         data1 = hdul1[ext].data
-        header['HISTORY'] = '{} {} {}'.format(ip1, operation, ip2)
+        header['HISTORY'] = '{} {} {}'.format(Path(ip1).name,
+                                              operation,
+                                              Path(ip2).name)
         if varext is None:
             var1 = None
         else:
@@ -112,14 +115,16 @@ def operate_process(ip1, ip2,
         if int(ext) == 0:
             hdul[0] = fits.PrimaryHDU(result, header=header)
         else:
-            imagehdu = fits.ImageHDU(result, header=header)
+            imagehdu = fits.ImageHDU(result, header=header,
+                                     name="FLUX")
             hdul.append(imagehdu)
         if varext is not None:
             hdul.append(
                 fits.ImageHDU(var,
                               header=fits.getheader(
                                   ip1, ext=int(varext[index])
-                              )
+                              ),
+                              name="VARIANCE"
                               )
             )
     hdul.writeto(opfilename, overwrite=True)
@@ -250,14 +255,16 @@ def combine_process(files,
         if int(ext) == 0:
             hdul[0] = fits.PrimaryHDU(result, header=header)
         else:
-            imagehdu = fits.ImageHDU(result, header=header)
+            imagehdu = fits.ImageHDU(result, header=header,
+                                     name="FLUX")
             hdul.append(imagehdu)
         if varext is not None:
             hdul.append(
                 fits.ImageHDU(var,
                               header=fits.getheader(
                                   files_list[0], ext=int(varext[index])
-                                  )
+                                  ),
+                              name="VARIANCE"
                               )
                 )
         hdul.writeto(opfilename, overwrite=True)
@@ -326,6 +333,7 @@ def divide_smoothgradient(filename,
     for index, ext in enumerate(fluxext):
         inputimgdata = fits.getdata(filename, ext=int(ext))
         inputimgdata = np.clip(inputimgdata, 1, np.max(inputimgdata+1))
+        print("Smoothing the frame")
         print('It takes sometime (> 100 sec) to finish. Wait ...')
         try:
             smoothGrad = filters.median_filter(inputimgdata,
@@ -345,17 +353,53 @@ def divide_smoothgradient(filename,
             if int(ext) == 0:
                 hdul[0] = fits.PrimaryHDU(NormContdata, header=header)
             else:
-                imagehdu = fits.ImageHDU(NormContdata, header=header)
+                imagehdu = fits.ImageHDU(NormContdata, header=header,
+                                         name="FLUX")
                 hdul.append(imagehdu)
             if varext is not None:
                 hdul.append(
                     fits.ImageHDU(NormCont_var,
                                   header=fits.getheader(
                                       filename, ext=int(varext[index])
-                                      )
+                                      ),
+                                  name="VARIANCE"
                                   )
                     )
             hdul.writeto(opfilename, overwrite=True)
 
 
+def remove_cosmic_rays(input_fname,
+                       opfilename,
+                       fluxext=[0],
+                       varext=None):
+    primary_hdu = fits.PrimaryHDU()
+    hdul = fits.HDUList([primary_hdu])
+    for index, ext in enumerate(fluxext):
+        inputimgdata = fits.getdata(input_fname, ext=int(ext))
+        if varext is None:
+            crmask, cleararr = astroscrappy.detect_cosmics(inputimgdata)
+        else:
+            inputvardata = fits.getdata(input_fname, ext=int(varext[index]))
+            crmask, cleararr = astroscrappy.detect_cosmics(inputimgdata,
+                                                           inputvardata)
+        header = fits.getheader(input_fname, ext=0)
+        header['HISTORY'] = "Cosmic Rays removed with astroscrappy"
+        if int(ext) == 0:
+            hdul[0] = fits.PrimaryHDU(cleararr, header=header)
+        else:
+            imagehdu = fits.ImageHDU(cleararr, header=header)
+            hdul.append(imagehdu)
+        if varext is not None:
+            hdul.append(
+                fits.ImageHDU(inputvardata,
+                              header=fits.getheader(
+                                  input_fname, ext=int(varext[index])
+                                  ),
+                              name="VARIANCE"
+                              )
+                )
+        hdul.append(
+            fits.ImageHDU(crmask.astype(int), name="CRMASK")
+        )
+        hdul.writeto(opfilename, overwrite=True)
 # End
