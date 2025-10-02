@@ -9,8 +9,8 @@
 - name: Clear pip cache
   run: pip cache purge
 
-- name: Clean docs build
-  run: make clean -C docs
+- name: Remove old builds
+  run: rm -rf docs/_build
 
 - name: Install package
   run: pip install -e .
