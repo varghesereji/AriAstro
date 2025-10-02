@@ -1,29 +1,37 @@
 name: Build and Deploy Sphinx Docs
+
 on:
   push:
     branches: [main]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # <--- Add this to grant push permission
+      contents: write
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
+
       - name: Install package
         run: pip install -e .
+
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install sphinx furo sphinx-rtd-theme sphinxcontrib-mermaid
-          # Add other pip dependencies if required
+
       - name: Build the documentation
         run: make html -C docs
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/_build/html
-          force_orphan: true # optional
+          force_orphan: true

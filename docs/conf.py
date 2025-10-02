@@ -1,38 +1,34 @@
 # Configuration file for the Sphinx documentation builder.
 #
-# For the full list of built-in configuration values, see the documentation:
+# For full configuration values, see:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+from pathlib import Path
+import sys
 
-project = 'AriAstro'
-copyright = '2025, Varghese Reji'
-author = 'Varghese Reji'
+# -- Project information -----------------------------------------------------
+project = "AriAstro"
+copyright = "2025, Varghese Reji"
+author = "Varghese Reji"
 
 # -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
-extensions = []
-
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = 'alabaster'
-
-html_logo = "_static/AriAstro_logo.png"
-html_static_path = ['_static']
+sys.path.insert(0, str(Path(__file__).parent.parent.resolve()))
 
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",   # optional: for Google/NumPy style docstrings
-    "sphinx.ext.viewcode",   # optional: adds links to source code
-    "sphinxcontrib.mermaid",
+    "sphinx.ext.autodoc",     # Auto-generate docs from docstrings
+    "sphinx.ext.napoleon",    # Support for Google/NumPy style docstrings
+    "sphinx.ext.viewcode",    # Add links to highlighted source code
+    "sphinxcontrib.mermaid",  # Mermaid diagrams support
 ]
 
-# End
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+# -- Options for HTML output -------------------------------------------------
+html_theme = "furo"  # Or "sphinx_rtd_theme"
+
+html_logo = "_static/AriAstro_logo.png"
+html_static_path = ["_static"]
+
+# Optional: specify Mermaid version
+mermaid_version = "10.4.0"
