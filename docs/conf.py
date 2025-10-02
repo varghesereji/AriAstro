@@ -32,5 +32,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",   # optional: for Google/NumPy style docstrings
     "sphinx.ext.viewcode",   # optional: adds links to source code
+    "sphinxcontrib.mermaid",
 ]
 
+# End

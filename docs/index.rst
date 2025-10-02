@@ -6,10 +6,6 @@
 AriAstro documentation
 ======================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
 AriAstro is a Python package for combining and analyzing astronomical FITS files.
 It provides tools to average, add, subtract, or divide spectra/images and 
 perform continuum normalization with error propagation.
@@ -22,6 +18,7 @@ perform continuum normalization with error propagation.
    installation
    quickstart
    usage
+   flowchart
    api
 
 Indices and tables
