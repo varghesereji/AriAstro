@@ -10,6 +10,7 @@ from .utils import create_fits
 from .instrument import instrument_dict
 from .utils import extract_allexts
 from .operations import combine_data_full
+from .operations import combine_data
 
 try:
     from specutils.spectra import Spectrum
@@ -198,6 +199,7 @@ def continuum_normalize(datadict, flux_exts=[1],
 def combine_spectra(filesre="*.fits", directory=".",
                     opfilename="Comb_spectra.fits",
                     instrumentname=None,
+                    method='mean',
                     fluxext=(1, 2, 3),
                     varext=(4, 5, 6),
                     wlext=(7, 8, 9),
@@ -225,7 +227,10 @@ def combine_spectra(filesre="*.fits", directory=".",
     file_list = []
     if instrumentname is not None:
         instrument = instrument_dict[instrumentname]()
-        fluxext, varext, wlext = instrument.fits_extensions
+        fluxext, varext, wlext = instrument.fits_extensions()
+    req_qtys = None
+    req_qtys_dict = defaultdict(list)
+    req_qtys_dict_fullext = {}
     for cro, specfile in enumerate(files_list):
         specfile = Path(specfile)
         # print(specfile)
@@ -233,10 +238,17 @@ def combine_spectra(filesre="*.fits", directory=".",
         file_list.append(specfile.name)
         if instrumentname is not None:
             datadict, headerdict = instrument.process_data(fname=specfile,
-                                                           contnorm=True)
+                                                           contnorm=False)
+            req_qtys = instrument.req_qtys()
+
         else:
             datadict, headerdict = extract_allexts(fname=specfile)
-
+        if req_qtys is not None:
+            for extname, qtys in req_qtys.items():
+                for qty in qtys:
+                    req_qtys_dict[qty].append(headerdict[extname][qty])
+                req_qtys_dict_fullext[extname] = req_qtys_dict
+        # print(req_qtys_dict)
         if headerdict_main is None:
             headerdict_main = headerdict
 
@@ -245,13 +257,19 @@ def combine_spectra(filesre="*.fits", directory=".",
             data_dict[hduname].append(data)
     # print("data_dict", np.array(data_dict["SCIWAVE"])[:, 50])
     interp_data_dict = interpolation_spectra(data_dict, fluxext, wlext, varext)
-    # print("interp_data_dict", np.array(interp_data_dict["SCIFLUX"]).shape)
-    combined_dict = combine_data_full(interp_data_dict)
+    # print(req_qtys_dict_fullext)
+    if req_qtys is not None:
+        for extname, qtys in req_qtys_dict_fullext.items():
+            # print(extname, qtys)
+            for qty, value in qtys.items():
+                comb_qty = combine_data(value, method=method)
+                headerdict_main[extname][qty] = comb_qty[0]
+    combined_dict = combine_data_full(interp_data_dict, method=method)
     # # print(combined_dict)
     dict_keys = list(headerdict_main.keys())
 
-    headerdict_main[dict_keys[0]]['HISTORY'] = "Combined {}".format(
-        list(file_list))
+    headerdict_main[dict_keys[0]]['HISTORY'] = "{} {}".format(method,
+                                                              list(file_list))
 
     logger.info("Combining spectra")
     create_fits(combined_dict, headerdict_main,

@@ -4,7 +4,6 @@ import numpy as np
 from .utils import extract_allexts
 
 
-
 class Handle_NEID:
     """
     Class to handle NEID spectrograph FITS data.
@@ -41,7 +40,7 @@ class Handle_NEID:
         """Initialize the NEID handler instance."""
         pass
 
-    def fits_extensions():
+    def fits_extensions(self):
         fluxext = [1, 2, 3]
         varext = [4, 5, 6]
         wlext = [7, 8, 9]
@@ -166,8 +165,15 @@ class Handle_NEID:
         if contnorm:
             from .spectral_utils import continuum_normalize
             datadict = continuum_normalize(datadict, sci_ext, var_ext, wl_ext)
-
         return datadict, headerdict
+
+    def req_qtys(self):
+        """
+        Dictonary format:
+        {Name of extension: List of keys from that extension}
+        """
+        qty = {'CCFS': ['CCFRVMOD', 'BISMOD', 'FWHMMOD']}
+        return qty
 
 
 instrument_dict = {

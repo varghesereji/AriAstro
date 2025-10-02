@@ -132,6 +132,7 @@ def combine_data(dataarr, var=None, method='mean'):
     """
     dataarr = np.array(dataarr)
     N = dataarr.shape[0]
+    # print(dataarr.shape)
     if method == 'mean':
         comb_data = np.nanmean(dataarr, axis=0)
     elif method == 'median':

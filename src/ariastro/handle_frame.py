@@ -219,6 +219,7 @@ def combine_process(files,
     if instrument is not None:
         combine_spectra(files, opfilename=opfilename,
                         instrumentname=instrument,
+                        method=method,
                         fluxext=fluxext,
                         varext=varext)
         return
