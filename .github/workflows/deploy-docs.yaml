@@ -17,7 +17,7 @@ jobs:
         run: pip install -e .
       - name: Install dependencies
         run: |
-          pip install sphinx furo sphinx-rtd-theme sphinxext-mermaid
+          pip install sphinx furo sphinx-rtd-theme sphinxcontrib-mermaid
           # Add other pip dependencies if required
       - name: Build the documentation
         run: make html -C docs
