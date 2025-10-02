@@ -10,7 +10,7 @@
   run: pip cache purge
 
 - name: Clean docs build
-  run: make clean -C docs   # <--- MOVE this step here
+  run: make clean -C docs
 
 - name: Install package
   run: pip install -e .
