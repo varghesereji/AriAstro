@@ -9,4 +9,5 @@ from .handle_frame import combine_process
 from .handle_frame import operate_process
 from .handle_frame import divide_smoothgradient
 from .handle_frame import remove_cosmic_rays
+from .operations import weighted_mean_and_variance
 __all__ = []

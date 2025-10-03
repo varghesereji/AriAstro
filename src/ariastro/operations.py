@@ -103,7 +103,7 @@ def combine_data(dataarr, var=None, method='mean'):
         Variance array of the same shape as `dataarr`. If provided,
         error propagation is performed assuming independent errors,
         yielding the variance of the combined data. Default is None.
-    method : {'mean', 'median', 'biweight'}, optional
+    method : {'mean', 'median', 'biweight', 'weightedavg'}, optional
         Method used for combining the data:
 
         - 'mean' : arithmetic mean ignoring NaNs.
@@ -130,6 +130,9 @@ def combine_data(dataarr, var=None, method='mean'):
     - The biweight method is less sensitive to outliers than the mean
       or median.
     """
+    if method == 'weightedavg':
+        comb_data, comb_var = weighted_mean_and_variance(dataarr, var)
+        return comb_data, comb_var
     dataarr = np.array(dataarr)
     N = dataarr.shape[0]
     # print(dataarr.shape)
@@ -146,6 +149,57 @@ def combine_data(dataarr, var=None, method='mean'):
         comb_var = np.sum(var, axis=0) / N**2
         return comb_data, comb_var
     return comb_data, None
+
+
+def weighted_mean_and_variance(values, variances):
+    r"""
+    Compute the weighted mean and variance of the mean,
+    given measurements and their variances.
+
+    Parameters
+    ----------
+    values : array-like
+        Measured values (x_i)
+    variances : array-like
+        Variances of the measurements ($\sigma_i^2$).
+
+    Returns
+    ----------
+    mean : float
+        Weighted mean.
+    variance_of_mean : float
+        Variance of the weighted mean
+
+      Raises
+    ------
+    ValueError
+        If `variances` is None.
+    TypeError
+        If `values` or `variances` are not array-like.
+
+    Notes
+    -----
+    The weighted mean is computed as:
+
+    .. math::
+
+        \bar{x} = \frac{\sum_i w_i x_i}{\sum_i w_i}, \quad
+        w_i = \frac{1}{\sigma_i^2}
+
+    The variance of the weighted mean is:
+
+    .. math::
+
+        \sigma_{\bar{x}}^2 = \frac{1}{\sum_i w_i}
+    """
+    if variances is None:
+        raise TypeError("variances must be an array-like object")
+
+    weights = 1.0 / variances
+    mean = np.sum(weights * values, axis=0) / np.sum(weights, axis=0)
+    variance_of_mean = 1.0 / np.sum(weights, axis=0)
+
+    return mean, variance_of_mean
 
 
 def combine_data_full(datadict, dataext=[1, 2, 3],

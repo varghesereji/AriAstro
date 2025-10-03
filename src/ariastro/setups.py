@@ -32,7 +32,8 @@ def read_args():
     combine_parser = subparsers.add_parser("combine", parents=[parent],
                                            help="Combine multiple data files")
     combine_parser.add_argument("method",
-                                choices=["mean", "median", "biweight"],
+                                choices=["mean", "median", "biweight",
+                                         "weightedavg"],
                                 help="Method to combine data")
 
     combine_parser.add_argument(
