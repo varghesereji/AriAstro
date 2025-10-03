@@ -247,7 +247,8 @@ def combine_process(files,
                 var_array.append(var)
         if len(files_list) == 1:
             result = data_array[0]
-            variance = var_array[0]
+            if varext is not None:
+                variance = var_array[0]
         else:
             result, variance = combine_data(dataarr=data_array,
                                             var=var_array,
