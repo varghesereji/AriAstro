@@ -161,7 +161,7 @@ def weighted_mean_and_variance(values, variances):
     values : array-like
         Measured values (x_i)
     variances : array-like
-        Variances of the measurements ($\sigma_i^2$).
+        Variances of the measurements.
 
     Returns
     ----------
@@ -170,7 +170,7 @@ def weighted_mean_and_variance(values, variances):
     variance_of_mean : float
         Variance of the weighted mean
 
-      Raises
+    Raises
     ------
     ValueError
         If `variances` is None.

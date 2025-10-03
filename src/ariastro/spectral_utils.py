@@ -262,7 +262,11 @@ def combine_spectra(filesre="*.fits", directory=".",
         for extname, qtys in req_qtys_dict_fullext.items():
             # print(extname, qtys)
             for qty, value in qtys.items():
-                comb_qty = combine_data(value, method=method)
+                if method == 'weightedavg':
+                    qty_method = 'mean'
+                else:
+                    qty_method = method
+                comb_qty = combine_data(value, method=qty_method)
                 headerdict_main[extname][qty] = comb_qty[0]
     combined_dict = combine_data_full(interp_data_dict, method=method)
     # # print(combined_dict)
